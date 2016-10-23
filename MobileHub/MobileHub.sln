@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServices", "TestService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebApi", "TestWebApi\TestWebApi.csproj", "{7E8E326C-C41F-4EEC-A3F9-6653E46370F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2 LoginDatabaseContext", "LoginDatabaseContext\2 LoginDatabaseContext.csproj", "{6B388114-1021-4A73-8EE5-E93DDAEC16A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{7E8E326C-C41F-4EEC-A3F9-6653E46370F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E8E326C-C41F-4EEC-A3F9-6653E46370F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E8E326C-C41F-4EEC-A3F9-6653E46370F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B388114-1021-4A73-8EE5-E93DDAEC16A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B388114-1021-4A73-8EE5-E93DDAEC16A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B388114-1021-4A73-8EE5-E93DDAEC16A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B388114-1021-4A73-8EE5-E93DDAEC16A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +86,6 @@ Global
 		{F522D184-83D6-47D2-ADF1-475076265C4C} = {79B80984-B876-40C7-B82C-0E4D9394FE06}
 		{F7EE3C2E-B77A-4EA3-9D69-EA80CC381079} = {79B80984-B876-40C7-B82C-0E4D9394FE06}
 		{7E8E326C-C41F-4EEC-A3F9-6653E46370F9} = {79B80984-B876-40C7-B82C-0E4D9394FE06}
+		{6B388114-1021-4A73-8EE5-E93DDAEC16A8} = {A33DF074-C304-4E17-B878-D516F7AEBD96}
 	EndGlobalSection
 EndGlobal
