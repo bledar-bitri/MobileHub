@@ -52,12 +52,12 @@
       <Project>{ef18ea2f-78f0-41d3-8232-8f355285038c}</Project>
       <Name>Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataAccessLayer\3 DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\2 DataAccessLayer.csproj">
       <Project>{b9b8881f-ddfa-4b86-9585-3e3cda230e4c}</Project>
-      <Name>3 DataAccessLayer</Name>
+      <Name>2 DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DatabaseContext\1 DatabaseContext.csproj">
-      <Project>{4437de99-9d7b-4317-ac9a-51ed5b036947}</Project>
+    <ProjectReference Include="..\LoginDatabaseContext\1 DatabaseContext.csproj">
+      <Project>{6b388114-1021-4a73-8ee5-e93ddaec16a8}</Project>
       <Name>1 DatabaseContext</Name>
     </ProjectReference>
   </ItemGroup>

@@ -66,7 +66,7 @@
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\Person.cs" />
     <Compile Include="IgnoreEntityStateConvention.cs" />
-    <Compile Include="MobileHubContext.cs" />
+    <Compile Include="MobileHubCustomerContext.cs" />
     <Compile Include="MobileHubInitializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

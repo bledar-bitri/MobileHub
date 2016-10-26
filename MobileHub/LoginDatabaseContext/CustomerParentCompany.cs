@@ -12,18 +12,18 @@ namespace LoginDatabaseContext
     using System;
     using System.Collections.Generic;
     
-    public partial class Membership
+    public partial class CustomerParentCompany
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public int UserCompanyId { get; set; }
-        public int RoleId { get; set; }
-        public string AccountEmailAddress { get; set; }
-        public string AccountPhoneNumber { get; set; }
-        public string AccountFax { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CustomerParentCompany()
+        {
+            this.CustomerCompanies = new HashSet<CustomerCompany>();
+        }
     
-        public virtual Role Role { get; set; }
-        public virtual User User { get; set; }
-        public virtual UserCompany UserCompany { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CustomerCompany> CustomerCompanies { get; set; }
     }
 }

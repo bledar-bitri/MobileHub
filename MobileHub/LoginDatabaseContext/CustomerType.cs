@@ -12,27 +12,21 @@ namespace LoginDatabaseContext
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class CustomerType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public CustomerType()
         {
-            this.Logins = new HashSet<Login>();
-            this.Memberships = new HashSet<Membership>();
+            this.Customers = new HashSet<Customer>();
+            this.AvailableActions = new HashSet<AvailableAction>();
         }
     
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string UserName { get; set; }
-        public string MiddleName { get; set; }
-        public System.DateTime DateOfBirth { get; set; }
-        public string EMailAddress { get; set; }
-        public Nullable<System.DateTime> LastLogonTime { get; set; }
+        public string Name { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Login> Logins { get; set; }
+        public virtual ICollection<Customer> Customers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Membership> Memberships { get; set; }
+        public virtual ICollection<AvailableAction> AvailableActions { get; set; }
     }
 }

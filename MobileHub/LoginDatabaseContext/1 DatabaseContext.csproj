@@ -55,14 +55,66 @@
     <Compile Include="Account.cs">
       <DependentUpon>MobileHubSecurityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ActionHistory.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ActionType.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Address.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AvailableAction.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Country.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Customer.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerCompany.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerParentCompany.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerType.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerUser.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Event.cs">
-      <DependentUpon>MobileHubSecurityModel.tt</DependentUpon>
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IgnoreEntityStatePropertyConvention.cs" />
+    <Compile Include="Locale.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Login.cs">
       <DependentUpon>MobileHubSecurityModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Meeting.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Membership.cs">
       <DependentUpon>MobileHubSecurityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MobileHubCustomerModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileHubCustomerModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MobileHubCustomerModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MobileHubCustomerModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileHubCustomerModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="MobileHubSecurityModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -96,6 +148,13 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>MobileHubSecurityModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <EntityDeploy Include="MobileHubCustomerModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MobileHubCustomerModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="MobileHubCustomerModel.edmx.diagram">
+      <DependentUpon>MobileHubCustomerModel.edmx</DependentUpon>
+    </None>
     <None Include="MobileHubSecurityModel.edmx.diagram">
       <DependentUpon>MobileHubSecurityModel.edmx</DependentUpon>
     </None>
@@ -105,6 +164,16 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="MobileHubCustomerModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MobileHubCustomerModel.edmx</DependentUpon>
+      <LastGenOutput>MobileHubCustomerModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="MobileHubCustomerModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MobileHubCustomerModel.edmx</DependentUpon>
+      <LastGenOutput>MobileHubCustomerModel.cs</LastGenOutput>
+    </Content>
     <Content Include="MobileHubSecurityModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MobileHubSecurityModel.edmx</DependentUpon>

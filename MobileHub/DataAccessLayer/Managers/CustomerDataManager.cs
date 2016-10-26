@@ -1,20 +1,19 @@
-﻿using System;
+﻿using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
-using DataAccessLayer.Util;
-using DatabaseContext;
-using DatabaseContext.Entities;
+using DataAccessLayer.HelperClasses;
+using LoginDatabaseContext;
 
 namespace DataAccessLayer.Managers
 {
     /// <summary>
-    /// Datenmanager für Passagier-Entitäten
+    /// Datamanager for Customer entities
     /// </summary>
-    public class CustomerDataManager : DataManagerBase, IDisposable
+    public class CustomerDataManager : DataManagerBase<MobileHubCustomerContext>
     {
-
+        
         /// <summary>
-        /// Öffentlicher Konstruktor für GL
+        /// Contructor used by the business logic
         /// </summary>
         public CustomerDataManager(bool preloading = false, bool lazyLoadingDefault = false, bool tracking = false)
          : this(preloading, lazyLoadingDefault, tracking, null)
@@ -22,20 +21,15 @@ namespace DataAccessLayer.Managers
 
         }
 
-        ///<summary>
-        /// Dieser Konstruktur muss internal sein, denn sonst würde die GL eine Referenz auf EF brauchen!!!
+        /// <summary>
+        /// This constructor must be internal otherwise we need a EF Reference in the busines logic
         /// </summary>
-        internal CustomerDataManager(bool preloading = true, bool lazyLoadingDefault = false, bool tracking = false, MobileHubContext kontext = null)
-        : base(lazyLoadingDefault, tracking, kontext)
+        internal CustomerDataManager(bool preloading = true, bool lazyLoadingDefault = false, bool tracking = false, MobileHubCustomerContext customerContext = null)
+        : base(lazyLoadingDefault, tracking, customerContext)
         {
-            // Preloading lädt alle Flüge in den Cache
-            if (preloading) ctx.Users.ToList();
+            if (preloading) ctx.Customers.ToList();
         }
 
-
-        /// <summary>
-        /// Holt einen Passagier
-        /// </summary>
         public Customer GetCustomer(int customerId, bool? tracking = null)
         {
             var query = from c in Query<Customer>(tracking) where c.Id == customerId select c;
@@ -43,42 +37,57 @@ namespace DataAccessLayer.Managers
         }
 
 
-        /// <summary>
-        /// Get all Customer by name
-        /// </summary>
         public List<Customer> GetCustomers(string name)
         {
-            // .OfType<Customer>() notwendig wegen Vererbung
-            var abfrage = from p in ctx.Users.OfType<Customer>() where p.FirstName.Contains(name) || p.LastName.Contains(name) select p;
-            return abfrage.ToList();
+            var query = from p in ctx.Customers where p.FirstName.Contains(name) || p.LastName.Contains(name) select p;
+            return query.ToList();
+        }
+
+
+        public List<Customer> GetCustomerByAccountManager(int accountManagerId)
+        {
+
+            return ctx.Customers.Include(c => c.Meetings.Select(m => m.Address).Select(a => a.Country))
+                .Include(c => c.CustomerType)
+                .Where(c => c.AccountManagersUserId == accountManagerId).ToList();
+        }
+
+        public object GetCustomerActionsHistory(int accountManagerId, int localeId)
+        {
+
+            var query = from h
+                in ctx.ActionHistories
+                join a in ctx.AvailableActions on h.ActionCode equals a.ActionCode
+                where h.UserId == accountManagerId && a.LocaleId == localeId
+                select new
+                {
+                    h.Address,
+                    h.ActionTime,
+                    h.CustomerUser,
+                    a.Name,
+                    a.Description
+                };
+
+            return query.ToList();
         }
 
         public bool AddCustomerToMeeting(int customerId, int meetingId)
         {
             var fm = new MeetingDataManager(kontext: ctx);
 
-            Meeting meeting = fm.GetMeeting(meetingId, true); // Load Meeting with "TRACKING" on!
-            Customer customer = GetCustomer(customerId, true);
+            var meeting = fm.GetMeeting(meetingId, true); // Load Meeting with "TRACKING" on!
+            var customer = GetCustomer(customerId, true);
 
             meeting.Customer = customer;
 
-            int anz = ctx.SaveChanges();
+            int res = ctx.SaveChanges();
             fm.Dispose();
             return true;
         }
 
-        /// <summary>
-        /// Änderungen an einer Liste von Passagieren speichern
-        /// Die neu hinzugefügten Passagiere muss die Routine wieder zurückgeben, da die IDs für die 
-        /// neuen Passagiere erst beim SaveChanges von der Datenbank vergeben werden
-        /// </summary>
         public List<Customer> SaveCustomers(List<Customer> customers, out string statistics)
         {
             return Save(customers, out statistics);
         }
-
-
-
-
     }
 }

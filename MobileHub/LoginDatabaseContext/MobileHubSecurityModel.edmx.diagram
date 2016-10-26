@@ -4,16 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="1809e6f38d744d2698d2dcd901e7fb57" Name="Diagram1">
-        <EntityTypeShape EntityType="MobileHubSecurityModel.Account" Width="1.5" PointX="1.5" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubSecurityModel.Event" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubSecurityModel.Login" Width="1.5" PointX="3" PointY="6.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubSecurityModel.Membership" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
+      <Diagram DiagramId="8162781e346a4fdfb3ebb97bdf925b31" Name="Diagram1">
+        <EntityTypeShape EntityType="MobileHubSecurityModel.Account" Width="1.5" PointX="1.5" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubSecurityModel.Login" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubSecurityModel.Membership" Width="1.5" PointX="6" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="MobileHubSecurityModel.Role" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubSecurityModel.User" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubSecurityModel.UserCompany" Width="1.5" PointX="3.75" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubSecurityModel.User" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubSecurityModel.UserCompany" Width="1.5" PointX="3.75" PointY="8.125" IsExpanded="true" />
         <AssociationConnector Association="MobileHubSecurityModel.FK_UserCompany_Account" ManuallyRouted="false" />
-        <AssociationConnector Association="MobileHubSecurityModel.FK_Event_User" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubSecurityModel.FK_Login_User" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubSecurityModel.FK_Membership_Role" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubSecurityModel.FK_Membership_User" ManuallyRouted="false" />

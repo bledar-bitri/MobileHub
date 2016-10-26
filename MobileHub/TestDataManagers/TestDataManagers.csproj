@@ -4,16 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B9B8881F-DDFA-4B86-9585-3E3CDA230E4C}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{570CEEC3-4375-44D3-BC8A-896EFE9E0303}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataAccessLayer</RootNamespace>
-    <AssemblyName>DataAccessLayer</AssemblyName>
+    <RootNamespace>TestDataManagers</RootNamespace>
+    <AssemblyName>TestDataManagers</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -50,23 +53,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HelperClasses\DataManagerBase.cs" />
-    <Compile Include="HelperClasses\DbContextExtensions.cs" />
-    <Compile Include="HelperClasses\EntityManagerBase.cs" />
-    <Compile Include="HelperClasses\EntityState.cs" />
-    <Compile Include="Managers\MeetingDataManager.cs" />
-    <Compile Include="Managers\CustomerDataManager.cs" />
-    <Compile Include="Managers\UserDataManager.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\DataManagerBase.cs" />
+    <Compile Include="TestCustomerDataManager.cs" />
+    <Compile Include="TestUserDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DatabaseContext\1 DatabaseContext.csproj">
-      <Project>{4437de99-9d7b-4317-ac9a-51ed5b036947}</Project>
+    <ProjectReference Include="..\DataAccessLayer\2 DataAccessLayer.csproj">
+      <Project>{b9b8881f-ddfa-4b86-9585-3e3cda230e4c}</Project>
+      <Name>2 DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoginDatabaseContext\1 DatabaseContext.csproj">
+      <Project>{6b388114-1021-4a73-8ee5-e93ddaec16a8}</Project>
       <Name>1 DatabaseContext</Name>
     </ProjectReference>
   </ItemGroup>

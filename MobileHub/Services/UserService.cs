@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Contracts;
-using DataAccessLayer.Managers;
-using DatabaseContext.Entities;
+using DataAccessLayer.Managers.Security;
+using LoginDatabaseContext;
 
 namespace Services
 {

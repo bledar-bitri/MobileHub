@@ -13,16 +13,6 @@
           <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="PlanLevel" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
-        <EntityType Name="Event">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="EventTime" Type="datetime" Nullable="false" />
-          <Property Name="Purpose" Type="varchar" MaxLength="255" />
-          <Property Name="Memo" Type="text" />
-        </EntityType>
         <EntityType Name="Login">
           <Key>
             <PropertyRef Name="Id" />
@@ -43,7 +33,6 @@
           <Property Name="AccountEmailAddress" Type="varchar" MaxLength="150" Nullable="false" />
           <Property Name="AccountPhoneNumber" Type="varchar" MaxLength="20" />
           <Property Name="AccountFax" Type="varchar" MaxLength="20" />
-          <Property Name="CustomerCompayId" Type="int" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -61,6 +50,9 @@
           <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="MiddleName" Type="varchar" MaxLength="50" />
+          <Property Name="DateOfBirth" Type="datetime" Nullable="false" />
+          <Property Name="EMailAddress" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="LastLogonTime" Type="datetime" />
         </EntityType>
         <EntityType Name="UserCompany">
           <Key>
@@ -71,18 +63,6 @@
           <Property Name="AccessLevel" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="AccountId" Type="int" Nullable="false" />
         </EntityType>
-        <Association Name="FK_Event_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Event" Type="Self.Event" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Event">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Login_User">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Login" Type="Self.Login" Multiplicity="*" />
@@ -145,16 +125,11 @@
         </Association>
         <EntityContainer Name="MobileHubSecurityModelStoreContainer">
           <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Login" EntityType="Self.Login" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Membership" EntityType="Self.Membership" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserCompany" EntityType="Self.UserCompany" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Event_User" Association="Self.FK_Event_User">
-            <End Role="User" EntitySet="User" />
-            <End Role="Event" EntitySet="Event" />
-          </AssociationSet>
           <AssociationSet Name="FK_Login_User" Association="Self.FK_Login_User">
             <End Role="User" EntitySet="User" />
             <End Role="Login" EntitySet="Login" />
@@ -190,17 +165,6 @@
           <Property Name="PlanLevel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="UserCompanies" Relationship="Self.FK_UserCompany_Account" FromRole="Account" ToRole="UserCompany" />
         </EntityType>
-        <EntityType Name="Event">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="EventTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Purpose" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="User" Relationship="Self.FK_Event_User" FromRole="Event" ToRole="User" />
-        </EntityType>
         <EntityType Name="Login">
           <Key>
             <PropertyRef Name="Id" />
@@ -222,7 +186,6 @@
           <Property Name="AccountEmailAddress" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AccountPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="AccountFax" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="CustomerCompayId" Type="Int32" />
           <NavigationProperty Name="Role" Relationship="Self.FK_Membership_Role" FromRole="Membership" ToRole="Role" />
           <NavigationProperty Name="User" Relationship="Self.FK_Membership_User" FromRole="Membership" ToRole="User" />
           <NavigationProperty Name="UserCompany" Relationship="Self.FK_Membership_UserCompany" FromRole="Membership" ToRole="UserCompany" />
@@ -244,7 +207,9 @@
           <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Events" Relationship="Self.FK_Event_User" FromRole="User" ToRole="Event" />
+          <Property Name="DateOfBirth" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EMailAddress" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastLogonTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Logins" Relationship="Self.FK_Login_User" FromRole="User" ToRole="Login" />
           <NavigationProperty Name="Memberships" Relationship="Self.FK_Membership_User" FromRole="User" ToRole="Membership" />
         </EntityType>
@@ -268,18 +233,6 @@
             </Principal>
             <Dependent Role="UserCompany">
               <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Event_User">
-          <End Role="User" Type="Self.User" Multiplicity="1" />
-          <End Role="Event" Type="Self.Event" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="User">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Event">
-              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -333,7 +286,6 @@
         </Association>
         <EntityContainer Name="MobileHubSecurityContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Accounts" EntityType="Self.Account" />
-          <EntitySet Name="Events" EntityType="Self.Event" />
           <EntitySet Name="Logins" EntityType="Self.Login" />
           <EntitySet Name="Memberships" EntityType="Self.Membership" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
@@ -342,10 +294,6 @@
           <AssociationSet Name="FK_UserCompany_Account" Association="Self.FK_UserCompany_Account">
             <End Role="Account" EntitySet="Accounts" />
             <End Role="UserCompany" EntitySet="UserCompanies" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Event_User" Association="Self.FK_Event_User">
-            <End Role="User" EntitySet="Users" />
-            <End Role="Event" EntitySet="Events" />
           </AssociationSet>
           <AssociationSet Name="FK_Login_User" Association="Self.FK_Login_User">
             <End Role="User" EntitySet="Users" />
@@ -379,17 +327,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Events">
-            <EntityTypeMapping TypeName="MobileHubSecurityModel.Event">
-              <MappingFragment StoreEntitySet="Event">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="EventTime" ColumnName="EventTime" />
-                <ScalarProperty Name="Purpose" ColumnName="Purpose" />
-                <ScalarProperty Name="Memo" ColumnName="Memo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Logins">
             <EntityTypeMapping TypeName="MobileHubSecurityModel.Login">
               <MappingFragment StoreEntitySet="Login">
@@ -410,7 +347,6 @@
                 <ScalarProperty Name="AccountEmailAddress" ColumnName="AccountEmailAddress" />
                 <ScalarProperty Name="AccountPhoneNumber" ColumnName="AccountPhoneNumber" />
                 <ScalarProperty Name="AccountFax" ColumnName="AccountFax" />
-                <ScalarProperty Name="CustomerCompayId" ColumnName="CustomerCompayId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -430,6 +366,9 @@
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="EMailAddress" ColumnName="EMailAddress" />
+                <ScalarProperty Name="LastLogonTime" ColumnName="LastLogonTime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using DatabaseContext.Entities;
+using LoginDatabaseContext;
 
 namespace Contracts
 {
@@ -27,16 +27,6 @@ namespace Contracts
             ID = user.Id;
             FirstName = user.FirstName;
             LastName = user.LastName;
-            DateOfBirth = user.DateOfBirth;
-            EMailAddress = user.EMailAddress;
-            Address = user.Address;
-
-            if (user.Meetings == null) return;
-
-            foreach (var meeting in user.Meetings)
-            {
-                Meetings.Add(meeting);
-            }
         }
 
         public User ToEntity()
@@ -46,17 +36,7 @@ namespace Contracts
                 Id = ID,
                 FirstName = FirstName,
                 LastName = LastName,
-                DateOfBirth = DateOfBirth,
-                EMailAddress = EMailAddress,
-                Address = Address,
             };
-            if (Meetings != null)
-            {
-                foreach (var meeting in Meetings)
-                {
-                    user.Meetings.Add(meeting);
-                }
-            }
             return user;
         }
     }

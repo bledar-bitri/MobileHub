@@ -26,7 +26,6 @@ namespace LoginDatabaseContext
         }
     
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Login> Logins { get; set; }
         public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<Role> Roles { get; set; }

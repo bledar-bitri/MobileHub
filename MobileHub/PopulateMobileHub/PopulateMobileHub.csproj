@@ -53,17 +53,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomerDatabasePopulator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecurityDatabasePopulator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DatabaseContext\1 DatabaseContext.csproj">
-      <Project>{4437de99-9d7b-4317-ac9a-51ed5b036947}</Project>
+    <ProjectReference Include="..\LoginDatabaseContext\1 DatabaseContext.csproj">
+      <Project>{6B388114-1021-4A73-8EE5-E93DDAEC16A8}</Project>
       <Name>1 DatabaseContext</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{69aac7af-af35-46c6-b347-8fac4f41d6f5}</Project>
+      <Name>Services</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

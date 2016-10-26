@@ -4,9 +4,9 @@ using System.Text;
 
 namespace DatabaseContext
 {
-    public class MobileHubInitializer : DropCreateDatabaseIfModelChanges<MobileHubContext>
+    public class MobileHubInitializer : DropCreateDatabaseIfModelChanges<MobileHubCustomerContext>
     {
-        protected override void Seed(MobileHubContext context)
+        protected override void Seed(MobileHubCustomerContext customerContext)
         {
             /*
             var users = new List<User>
@@ -47,8 +47,8 @@ namespace DatabaseContext
                     }
                 }
             };
-            users.ForEach(u => context.Users.Add(u));
-            context.SaveChanges();
+            users.ForEach(u => customerContext.Users.Add(u));
+            customerContext.SaveChanges();
             */
         }
     }

@@ -12,18 +12,18 @@ namespace LoginDatabaseContext
     using System;
     using System.Collections.Generic;
     
-    public partial class Membership
+    public partial class Meeting
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public int UserCompanyId { get; set; }
-        public int RoleId { get; set; }
-        public string AccountEmailAddress { get; set; }
-        public string AccountPhoneNumber { get; set; }
-        public string AccountFax { get; set; }
+        public int CustomerId { get; set; }
+        public System.DateTime MeetingTime { get; set; }
+        public string Purpose { get; set; }
+        public string Memo { get; set; }
+        public int AddressId { get; set; }
     
-        public virtual Role Role { get; set; }
-        public virtual User User { get; set; }
-        public virtual UserCompany UserCompany { get; set; }
+        public virtual Address Address { get; set; }
+        public virtual Customer Customer { get; set; }
+        public virtual CustomerUser CustomerUser { get; set; }
     }
 }

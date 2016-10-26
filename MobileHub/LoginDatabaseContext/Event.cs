@@ -19,7 +19,9 @@ namespace LoginDatabaseContext
         public System.DateTime EventTime { get; set; }
         public string Purpose { get; set; }
         public string Memo { get; set; }
+        public int AddressId { get; set; }
     
-        public virtual User User { get; set; }
+        public virtual Address Address { get; set; }
+        public virtual CustomerUser CustomerUser { get; set; }
     }
 }

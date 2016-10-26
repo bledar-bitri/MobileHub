@@ -12,18 +12,18 @@ namespace LoginDatabaseContext
     using System;
     using System.Collections.Generic;
     
-    public partial class Membership
+    public partial class AvailableAction
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public int UserCompanyId { get; set; }
-        public int RoleId { get; set; }
-        public string AccountEmailAddress { get; set; }
-        public string AccountPhoneNumber { get; set; }
-        public string AccountFax { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int LocaleId { get; set; }
+        public int CustomerTypeId { get; set; }
+        public int ActionTypeId { get; set; }
+        public int ActionCode { get; set; }
     
-        public virtual Role Role { get; set; }
-        public virtual User User { get; set; }
-        public virtual UserCompany UserCompany { get; set; }
+        public virtual ActionType ActionType { get; set; }
+        public virtual CustomerType CustomerType { get; set; }
+        public virtual Locale Locale { get; set; }
     }
 }

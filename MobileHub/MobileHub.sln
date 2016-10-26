@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 DataAccess", "1 DataAccess", "{A33DF074-C304-4E17-B878-D516F7AEBD96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1 DatabaseContext", "DatabaseContext\1 DatabaseContext.csproj", "{4437DE99-9D7B-4317-AC9A-51ED5B036947}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 DataContracts", "2 DataContracts", "{9CD44B7B-5560-400B-AA3A-5DE793631C66}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 BusinessLogic", "3 BusinessLogic", "{476DEC60-7FA7-44BE-BDC9-54022A242752}"
@@ -15,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 WebAPI", "4 WebAPI", "{88
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5 Test", "5 Test", "{79B80984-B876-40C7-B82C-0E4D9394FE06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "3 DataAccessLayer", "DataAccessLayer\3 DataAccessLayer.csproj", "{B9B8881F-DDFA-4B86-9585-3E3CDA230E4C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2 DataAccessLayer", "DataAccessLayer\2 DataAccessLayer.csproj", "{B9B8881F-DDFA-4B86-9585-3E3CDA230E4C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{EF18EA2F-78F0-41D3-8232-8F355285038C}"
 EndProject
@@ -29,7 +27,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServices", "TestService
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWebApi", "TestWebApi\TestWebApi.csproj", "{7E8E326C-C41F-4EEC-A3F9-6653E46370F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2 LoginDatabaseContext", "LoginDatabaseContext\2 LoginDatabaseContext.csproj", "{6B388114-1021-4A73-8EE5-E93DDAEC16A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "1 DatabaseContext", "LoginDatabaseContext\1 DatabaseContext.csproj", "{6B388114-1021-4A73-8EE5-E93DDAEC16A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDataManagers", "TestDataManagers\TestDataManagers.csproj", "{570CEEC3-4375-44D3-BC8A-896EFE9E0303}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +37,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4437DE99-9D7B-4317-AC9A-51ED5B036947}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4437DE99-9D7B-4317-AC9A-51ED5B036947}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4437DE99-9D7B-4317-AC9A-51ED5B036947}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4437DE99-9D7B-4317-AC9A-51ED5B036947}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9B8881F-DDFA-4B86-9585-3E3CDA230E4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B9B8881F-DDFA-4B86-9585-3E3CDA230E4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9B8881F-DDFA-4B86-9585-3E3CDA230E4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -73,12 +69,15 @@ Global
 		{6B388114-1021-4A73-8EE5-E93DDAEC16A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B388114-1021-4A73-8EE5-E93DDAEC16A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B388114-1021-4A73-8EE5-E93DDAEC16A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{570CEEC3-4375-44D3-BC8A-896EFE9E0303}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{570CEEC3-4375-44D3-BC8A-896EFE9E0303}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{570CEEC3-4375-44D3-BC8A-896EFE9E0303}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{570CEEC3-4375-44D3-BC8A-896EFE9E0303}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4437DE99-9D7B-4317-AC9A-51ED5B036947} = {A33DF074-C304-4E17-B878-D516F7AEBD96}
 		{B9B8881F-DDFA-4B86-9585-3E3CDA230E4C} = {A33DF074-C304-4E17-B878-D516F7AEBD96}
 		{EF18EA2F-78F0-41D3-8232-8F355285038C} = {9CD44B7B-5560-400B-AA3A-5DE793631C66}
 		{69AAC7AF-AF35-46C6-B347-8FAC4F41D6F5} = {476DEC60-7FA7-44BE-BDC9-54022A242752}
@@ -87,5 +86,6 @@ Global
 		{F7EE3C2E-B77A-4EA3-9D69-EA80CC381079} = {79B80984-B876-40C7-B82C-0E4D9394FE06}
 		{7E8E326C-C41F-4EEC-A3F9-6653E46370F9} = {79B80984-B876-40C7-B82C-0E4D9394FE06}
 		{6B388114-1021-4A73-8EE5-E93DDAEC16A8} = {A33DF074-C304-4E17-B878-D516F7AEBD96}
+		{570CEEC3-4375-44D3-BC8A-896EFE9E0303} = {79B80984-B876-40C7-B82C-0E4D9394FE06}
 	EndGlobalSection
 EndGlobal

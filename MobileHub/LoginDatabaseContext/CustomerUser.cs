@@ -12,27 +12,28 @@ namespace LoginDatabaseContext
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class CustomerUser
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public CustomerUser()
         {
-            this.Logins = new HashSet<Login>();
-            this.Memberships = new HashSet<Membership>();
+            this.Events = new HashSet<Event>();
+            this.Meetings = new HashSet<Meeting>();
+            this.Customers = new HashSet<Customer>();
+            this.ActionHistories = new HashSet<ActionHistory>();
         }
     
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string UserName { get; set; }
-        public string MiddleName { get; set; }
-        public System.DateTime DateOfBirth { get; set; }
-        public string EMailAddress { get; set; }
-        public Nullable<System.DateTime> LastLogonTime { get; set; }
+        public int LocaleId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Login> Logins { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Membership> Memberships { get; set; }
+        public virtual ICollection<Meeting> Meetings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Customer> Customers { get; set; }
+        public virtual Locale Locale { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ActionHistory> ActionHistories { get; set; }
     }
 }

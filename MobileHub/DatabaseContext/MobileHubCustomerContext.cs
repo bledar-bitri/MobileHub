@@ -5,10 +5,10 @@ using DatabaseContext.Entities;
 
 namespace DatabaseContext
 {
-    public class MobileHubContext : DbContext
+    public class MobileHubCustomerContext : DbContext
     {
-        //public MobileHubContext() : base("MobileHubContext")
-        public MobileHubContext() : base()
+        //public MobileHubCustomerContext() : base("MobileHubCustomerContext")
+        public MobileHubCustomerContext() : base()
         {
             
         }
