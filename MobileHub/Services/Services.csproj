@@ -33,12 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IPasswordService.cs" />
@@ -52,14 +46,21 @@
       <Project>{ef18ea2f-78f0-41d3-8232-8f355285038c}</Project>
       <Name>Contracts</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataAccessLayer\2 DataAccessLayer.csproj">
+    <ProjectReference Include="..\CustomerModel\2 CustomerModel.csproj">
+      <Project>{ef399d86-10d3-4b8a-ab6b-232a701d0f07}</Project>
+      <Name>2 CustomerModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataAccessLayer\3 DataAccessLayer.csproj">
       <Project>{b9b8881f-ddfa-4b86-9585-3e3cda230e4c}</Project>
-      <Name>2 DataAccessLayer</Name>
+      <Name>3 DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\LoginDatabaseContext\1 DatabaseContext.csproj">
-      <Project>{6b388114-1021-4a73-8ee5-e93ddaec16a8}</Project>
-      <Name>1 DatabaseContext</Name>
+    <ProjectReference Include="..\SecurityModel\1 SecurityModel.csproj">
+      <Project>{b1691257-f06d-4da5-ae6d-1c1ea398b95e}</Project>
+      <Name>1 SecurityModel</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

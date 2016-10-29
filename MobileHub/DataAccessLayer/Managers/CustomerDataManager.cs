@@ -1,8 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Collections.Generic;
 using System.Linq;
+using CustomerModel;
 using DataAccessLayer.HelperClasses;
-using LoginDatabaseContext;
+
 
 namespace DataAccessLayer.Managers
 {
@@ -30,7 +31,7 @@ namespace DataAccessLayer.Managers
             if (preloading) ctx.Customers.ToList();
         }
 
-        public Customer GetCustomer(int customerId, bool? tracking = null)
+        public Customer GetCustomer(string customerId, bool? tracking = null)
         {
             var query = from c in Query<Customer>(tracking) where c.Id == customerId select c;
             return query.SingleOrDefault();
@@ -52,7 +53,7 @@ namespace DataAccessLayer.Managers
                 .Where(c => c.AccountManagersUserId == accountManagerId).ToList();
         }
 
-        public object GetCustomerActionsHistory(int accountManagerId, int localeId)
+        public object GetCustomerActionsHistory(int accountManagerId, string localeId)
         {
 
             var query = from h
@@ -71,9 +72,9 @@ namespace DataAccessLayer.Managers
             return query.ToList();
         }
 
-        public bool AddCustomerToMeeting(int customerId, int meetingId)
+        public bool AddCustomerToMeeting(string customerId, string meetingId)
         {
-            var fm = new MeetingDataManager(kontext: ctx);
+            var fm = new MeetingDataManager(context: ctx);
 
             var meeting = fm.GetMeeting(meetingId, true); // Load Meeting with "TRACKING" on!
             var customer = GetCustomer(customerId, true);

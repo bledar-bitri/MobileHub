@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using LoginDatabaseContext;
+using CustomerModel;
+using SecurityModel;
 
 namespace PopulateMobileHub
 {
@@ -26,6 +25,8 @@ namespace PopulateMobileHub
                 {
                     new Locale()
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTimeOffset.UtcNow,
                         Name = "German - Germany",
                         Code = "de",
                         LcidString = "de-de",
@@ -35,6 +36,8 @@ namespace PopulateMobileHub
                     },
                     new Locale()
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTimeOffset.UtcNow,
                         Name = "English - United States",
                         Code = "en",
                         LcidString = "en-us",
@@ -52,11 +55,15 @@ namespace PopulateMobileHub
                 {
                     new Country
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Abbreviation = "DE",
                         Name = "Germany"
                     },
                     new Country
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Abbreviation = "AT",
                         Name = "Austria"
                     },
@@ -70,6 +77,8 @@ namespace PopulateMobileHub
                 {
                     new Address
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Street = "slavi soucek str 11",
                         City = "Salzburg",
                         Country = countries[1],
@@ -78,6 +87,8 @@ namespace PopulateMobileHub
 
                     new Address
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Street = "rennbahnstrasse 4b",
                         City = "Salzburg",
                         Country = countries[1],
@@ -109,11 +120,15 @@ namespace PopulateMobileHub
 
                 var company1 = new CustomerCompany
                 {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
                     Name = "test company",
                     Address = addresses[0]
                 };
                 var company2 = new CustomerCompany
                 {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
                     Name = "second test company",
                     Address = addresses[1]
                 };
@@ -127,6 +142,8 @@ namespace PopulateMobileHub
                 {
                     new CustomerType
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Name = "Normal"
                     }
                 };
@@ -136,25 +153,31 @@ namespace PopulateMobileHub
 
                 var mj = new Customer
                 {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
                     FirstName = "Michael",
                     LastName = "Jordan",
                     Address = addresses[0],
                     CustomerCompany = company1,
-                    AccountManagersUserId = users[0].Id
+                    AccountManagersUserId = users[0].Id,
+                    CustomerType = customerTypes[0]
+                    
                 };
 
                 var lebron = new Customer
                 {
+                    Id = Guid.NewGuid().ToString(),
+                    CreatedAt = DateTime.UtcNow,
                     FirstName = "Lebron",
                     LastName = "James",
                     Address = addresses[0],
                     CustomerCompany = company2,
-                    AccountManagersUserId = users[1].Id
+                    AccountManagersUserId = users[1].Id,
+                    CustomerType = customerTypes[0]
                 };
 
                 var customers = new List<Customer>
                 {
-
                     mj, lebron
                 };
 
@@ -166,11 +189,15 @@ namespace PopulateMobileHub
                 {
                     new ActionType
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Code = 1,
                         Description = "Normal Action"
                     },
                     new ActionType
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Code = -1,
                         Description = "Invisible Action"
                     },
@@ -183,6 +210,8 @@ namespace PopulateMobileHub
                 {
                     new AvailableAction
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         ActionCode = 1,
                         ActionType = actionTypes[0],
                         CustomerType = customerTypes[0],
@@ -192,6 +221,8 @@ namespace PopulateMobileHub
                     },
                     new AvailableAction
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         ActionCode = 1,
                         ActionType = actionTypes[0],
                         CustomerType = customerTypes[0],
@@ -210,6 +241,8 @@ namespace PopulateMobileHub
                 {
                     var meeting1 = new Meeting
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Address = addresses[0],
                         MeetingTime = DateTime.Now.AddDays(-1),
                         Purpose = "First Meeting",
@@ -219,6 +252,8 @@ namespace PopulateMobileHub
                     };
                     var meeting2 = new Meeting
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Address = addresses[1],
                         MeetingTime = DateTime.Now,
                         Purpose = "Second Meeting",
@@ -238,6 +273,8 @@ namespace PopulateMobileHub
                 {
                     new ActionHistory
                     {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
                         Address = addresses[0],
                         Customer = customers[0],
                         CustomerUser = customerUsers[0],
@@ -248,7 +285,27 @@ namespace PopulateMobileHub
                 };
                 #endregion
 
+                #region items
+
+                var items = new List<Item>
+                {
+                    new Item
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        CreatedAt = DateTime.UtcNow,
+                        Description = "Some Test Item",
+                        OriginalItemId = "123921",
+                        Price = new decimal(12.99),
+                        Title = "Test 1"
+                    },
+
+                };
+                #endregion
+
+                ctx.Database.CommandTimeout = 180;
+
                 Console.WriteLine("Adding data to the context...\n");
+
                 locales.ForEach(l => ctx.Locales.Add(l));
                 countries.ForEach(c => ctx.Countries.Add(c));
                 addresses.ForEach(a => ctx.Addresses.Add(a));

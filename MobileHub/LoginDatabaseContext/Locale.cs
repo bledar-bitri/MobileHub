@@ -17,8 +17,8 @@ namespace LoginDatabaseContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Locale()
         {
-            this.CustomerUsers = new HashSet<CustomerUser>();
             this.AvailableActions = new HashSet<AvailableAction>();
+            this.CustomerUsers = new HashSet<CustomerUser>();
         }
     
         public int Id { get; set; }
@@ -30,8 +30,8 @@ namespace LoginDatabaseContext
         public Nullable<int> LcidCodePage { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomerUser> CustomerUsers { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AvailableAction> AvailableActions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CustomerUser> CustomerUsers { get; set; }
     }
 }

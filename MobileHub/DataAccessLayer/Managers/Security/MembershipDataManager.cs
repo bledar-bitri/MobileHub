@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.HelperClasses;
-using LoginDatabaseContext;
+using SecurityModel;
 
 
 namespace DataAccessLayer.Managers.Security

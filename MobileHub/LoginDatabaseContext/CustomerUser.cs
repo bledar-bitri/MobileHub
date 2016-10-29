@@ -17,23 +17,26 @@ namespace LoginDatabaseContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public CustomerUser()
         {
+            this.ActionHistories = new HashSet<ActionHistory>();
+            this.Customers = new HashSet<Customer>();
             this.Events = new HashSet<Event>();
             this.Meetings = new HashSet<Meeting>();
-            this.Customers = new HashSet<Customer>();
-            this.ActionHistories = new HashSet<ActionHistory>();
+            this.OrderHeaders = new HashSet<OrderHeader>();
         }
     
         public int Id { get; set; }
         public int LocaleId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Event> Events { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Meeting> Meetings { get; set; }
+        public virtual ICollection<ActionHistory> ActionHistories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer> Customers { get; set; }
         public virtual Locale Locale { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ActionHistory> ActionHistories { get; set; }
+        public virtual ICollection<Event> Events { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Meeting> Meetings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderHeader> OrderHeaders { get; set; }
     }
 }

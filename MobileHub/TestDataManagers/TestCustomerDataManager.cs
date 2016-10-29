@@ -21,7 +21,7 @@ namespace TestDataManagers
                     Console.WriteLine("Could not get any customers for user: " + UserIdToRead);
                 }
 
-                var history = mgr.GetCustomerActionsHistory(UserIdToRead, UserLocaleId);
+                var history = mgr.GetCustomerActionsHistory(UserIdToRead, UserLocaleId.ToString());
                 if (history != null)
                 {
                     Console.WriteLine("Got {0} history ", history);

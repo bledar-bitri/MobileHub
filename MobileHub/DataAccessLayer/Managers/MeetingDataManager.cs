@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using CustomerModel;
 using DataAccessLayer.HelperClasses;
-using LoginDatabaseContext;
 
 
 namespace DataAccessLayer.Managers
@@ -23,8 +23,8 @@ namespace DataAccessLayer.Managers
         /// <summary>
         /// This constructor must be internal otherwise we need a EF Reference in the busines logic
         /// </summary>
-        internal MeetingDataManager(bool lazyLoadingDefault = false, bool tracking = false, bool preloading = true, MobileHubCustomerContext kontext = null) :
-         base(lazyLoadingDefault, tracking, kontext)
+        internal MeetingDataManager(bool lazyLoadingDefault = false, bool tracking = false, bool preloading = true, MobileHubCustomerContext context = null) :
+         base(lazyLoadingDefault, tracking, context)
         {
             // Preloading loads all meetings in the context-cache
             if (preloading)
@@ -34,7 +34,7 @@ namespace DataAccessLayer.Managers
             }
         }
 
-        public Meeting GetMeeting(int meetingId, bool? tracking = null, bool includeUsers = false, bool includeCustomers = false)
+        public Meeting GetMeeting(string meetingId, bool? tracking = null, bool includeUsers = false, bool includeCustomers = false)
         {
 
             List<string> includes = null;
@@ -48,7 +48,7 @@ namespace DataAccessLayer.Managers
             return meeting;
         }
         
-        public List<Meeting> GetMeetings(int userId, int customerId, bool noTracking = true)
+        public List<Meeting> GetMeetings(int userId, string customerId, bool noTracking = true)
         {
             var query = from m in Query<Meeting>(noTracking, "") select m;
 

@@ -18,9 +18,9 @@ namespace LoginDatabaseContext
         public int CustomerId { get; set; }
         public int UserId { get; set; }
         public int AddressId { get; set; }
-        public string Memo { get; set; }
         public int ActionCode { get; set; }
         public System.DateTime ActionTime { get; set; }
+        public string Memo { get; set; }
     
         public virtual Address Address { get; set; }
         public virtual Customer Customer { get; set; }

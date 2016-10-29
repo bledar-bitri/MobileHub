@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MobileHubCustomerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MobileHubCustomerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ActionHistory">
           <Key>
             <PropertyRef Name="Id" />
@@ -113,6 +113,18 @@
           <Property Name="Purpose" Type="varchar" MaxLength="255" />
           <Property Name="Memo" Type="text" />
           <Property Name="AddressId" Type="int" Nullable="false" />
+          <Property Name="CustomerId" Type="int" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OriginalItemId" Type="varchar" MaxLength="100" />
+          <Property Name="Title" Type="varchar" MaxLength="100" />
+          <Property Name="Description" Type="varchar" MaxLength="255" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="PicUrl" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Locale">
           <Key>
@@ -137,6 +149,31 @@
           <Property Name="Purpose" Type="varchar" MaxLength="255" />
           <Property Name="Memo" Type="text" />
           <Property Name="AddressId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderHeader">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="AddressId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="MeetingId" Type="int" />
+          <Property Name="EventId" Type="int" />
+          <Property Name="OrderTime" Type="datetime" Nullable="false" />
+          <Property Name="TotalAmount" Type="money" Nullable="false" />
+          <Property Name="TotalTax" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="ItemQuantity" Type="int" Nullable="false" />
+          <Property Name="ItemPrice" Type="money" Nullable="false" />
+          <Property Name="TotalPrice" Type="money" Nullable="false" />
         </EntityType>
         <Association Name="FK_ActionHistory_Address">
           <End Role="Address" Type="Self.Address" Multiplicity="1" />
@@ -366,6 +403,66 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OrderHeader_Address">
+          <End Role="Address" Type="Self.Address" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="AddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderHeader_CustomerUser">
+          <End Role="CustomerUser" Type="Self.CustomerUser" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItem_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItem_OrderHeader">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MobileHubCustomerModelStoreContainer">
           <EntitySet Name="ActionHistory" EntityType="Self.ActionHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ActionType" EntityType="Self.ActionType" Schema="dbo" store:Type="Tables" />
@@ -378,8 +475,11 @@
           <EntitySet Name="CustomerType" EntityType="Self.CustomerType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerUser" EntityType="Self.CustomerUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Event" EntityType="Self.Event" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Locale" EntityType="Self.Locale" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Meeting" EntityType="Self.Meeting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderHeader" EntityType="Self.OrderHeader" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItem" EntityType="Self.OrderItem" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_ActionHistory_Address" Association="Self.FK_ActionHistory_Address">
             <End Role="Address" EntitySet="Address" />
             <End Role="ActionHistory" EntitySet="ActionHistory" />
@@ -456,11 +556,56 @@
             <End Role="CustomerUser" EntitySet="CustomerUser" />
             <End Role="Meeting" EntitySet="Meeting" />
           </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Address" Association="Self.FK_OrderHeader_Address">
+            <End Role="Address" EntitySet="Address" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Customer" Association="Self.FK_OrderHeader_Customer">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_CustomerUser" Association="Self.FK_OrderHeader_CustomerUser">
+            <End Role="CustomerUser" EntitySet="CustomerUser" />
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItem_Item" Association="Self.FK_OrderItem_Item">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItem_OrderHeader" Association="Self.FK_OrderItem_OrderHeader">
+            <End Role="OrderHeader" EntitySet="OrderHeader" />
+            <End Role="OrderItem" EntitySet="OrderItem" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MobileHubCustomerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ActionHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="AddressId" Type="Int32" Nullable="false" />
+          <Property Name="ActionCode" Type="Int32" Nullable="false" />
+          <Property Name="ActionTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Address" Relationship="Self.FK_ActionHistory_Address" FromRole="ActionHistory" ToRole="Address" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_ActionHistory_Customer" FromRole="ActionHistory" ToRole="Customer" />
+          <NavigationProperty Name="CustomerUser" Relationship="Self.FK_ActionHistory_CustomerUser" FromRole="ActionHistory" ToRole="CustomerUser" />
+        </EntityType>
+        <EntityType Name="ActionType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="AvailableActions" Relationship="Self.FK_AvailableAction_ActionType" FromRole="ActionType" ToRole="AvailableAction" />
+        </EntityType>
         <EntityType Name="Address">
           <Key>
             <PropertyRef Name="Id" />
@@ -474,12 +619,28 @@
           <Property Name="CountryId" Type="Int32" Nullable="false" />
           <Property Name="Latitude" Type="Int64" />
           <Property Name="Longitude" Type="Int64" />
+          <NavigationProperty Name="ActionHistories" Relationship="Self.FK_ActionHistory_Address" FromRole="Address" ToRole="ActionHistory" />
           <NavigationProperty Name="Country" Relationship="Self.FK_Address_Country" FromRole="Address" ToRole="Country" />
           <NavigationProperty Name="Customers" Relationship="Self.FK_Customer_Address" FromRole="Address" ToRole="Customer" />
           <NavigationProperty Name="CustomerCompanies" Relationship="Self.FK_CustomerCompany_Address" FromRole="Address" ToRole="CustomerCompany" />
           <NavigationProperty Name="Events" Relationship="Self.FK_Event_Address" FromRole="Address" ToRole="Event" />
           <NavigationProperty Name="Meetings" Relationship="Self.FK_Meeting_Address" FromRole="Address" ToRole="Meeting" />
-          <NavigationProperty Name="ActionHistories" Relationship="MobileHubCustomerModel.FK_ActionHistory_Address" FromRole="Address" ToRole="ActionHistory" />
+          <NavigationProperty Name="OrderHeaders" Relationship="Self.FK_OrderHeader_Address" FromRole="Address" ToRole="OrderHeader" />
+        </EntityType>
+        <EntityType Name="AvailableAction">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ActionTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ActionCode" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ActionType" Relationship="Self.FK_AvailableAction_ActionType" FromRole="AvailableAction" ToRole="ActionType" />
+          <NavigationProperty Name="CustomerType" Relationship="Self.FK_AvailableAction_CustomerType" FromRole="AvailableAction" ToRole="CustomerType" />
+          <NavigationProperty Name="Locale" Relationship="Self.FK_AvailableAction_Locale" FromRole="AvailableAction" ToRole="Locale" />
         </EntityType>
         <EntityType Name="Country">
           <Key>
@@ -500,15 +661,16 @@
           <Property Name="MiddleName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="AddressId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Address" Relationship="Self.FK_Customer_Address" FromRole="Customer" ToRole="Address" />
-          <NavigationProperty Name="CustomerCompany" Relationship="Self.FK_Customer_CustomerCompany" FromRole="Customer" ToRole="CustomerCompany" />
-          <NavigationProperty Name="Meetings" Relationship="Self.FK_Meeting_Customer" FromRole="Customer" ToRole="Meeting" />
           <Property Name="AccountManagersUserId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CustomerUser" Relationship="MobileHubCustomerModel.FK_Customer_CustomerUser" FromRole="Customer" ToRole="CustomerUser" />
           <Property Name="OriginalCustomerId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="CustomerTypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="CustomerType" Relationship="MobileHubCustomerModel.FK_Customer_CustomerType" FromRole="Customer" ToRole="CustomerType" />
-          <NavigationProperty Name="ActionHistories" Relationship="MobileHubCustomerModel.FK_ActionHistory_Customer" FromRole="Customer" ToRole="ActionHistory" />
+          <NavigationProperty Name="ActionHistories" Relationship="Self.FK_ActionHistory_Customer" FromRole="Customer" ToRole="ActionHistory" />
+          <NavigationProperty Name="Address" Relationship="Self.FK_Customer_Address" FromRole="Customer" ToRole="Address" />
+          <NavigationProperty Name="CustomerCompany" Relationship="Self.FK_Customer_CustomerCompany" FromRole="Customer" ToRole="CustomerCompany" />
+          <NavigationProperty Name="CustomerType" Relationship="Self.FK_Customer_CustomerType" FromRole="Customer" ToRole="CustomerType" />
+          <NavigationProperty Name="CustomerUser" Relationship="Self.FK_Customer_CustomerUser1" FromRole="Customer" ToRole="CustomerUser" />
+          <NavigationProperty Name="Meetings" Relationship="Self.FK_Meeting_Customer" FromRole="Customer" ToRole="Meeting" />
+          <NavigationProperty Name="OrderHeaders" Relationship="Self.FK_OrderHeader_Customer" FromRole="Customer" ToRole="OrderHeader" />
         </EntityType>
         <EntityType Name="CustomerCompany">
           <Key>
@@ -530,17 +692,27 @@
           <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="CustomerCompanies" Relationship="Self.FK_CustomerCompany_CustomerParentCompany" FromRole="CustomerParentCompany" ToRole="CustomerCompany" />
         </EntityType>
+        <EntityType Name="CustomerType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="AvailableActions" Relationship="Self.FK_AvailableAction_CustomerType" FromRole="CustomerType" ToRole="AvailableAction" />
+          <NavigationProperty Name="Customers" Relationship="Self.FK_Customer_CustomerType" FromRole="CustomerType" ToRole="Customer" />
+        </EntityType>
         <EntityType Name="CustomerUser">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocaleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ActionHistories" Relationship="Self.FK_ActionHistory_CustomerUser" FromRole="CustomerUser" ToRole="ActionHistory" />
+          <NavigationProperty Name="Customers" Relationship="Self.FK_Customer_CustomerUser1" FromRole="CustomerUser" ToRole="Customer" />
+          <NavigationProperty Name="Locale" Relationship="Self.FK_CustomerUser_Locale" FromRole="CustomerUser" ToRole="Locale" />
           <NavigationProperty Name="Events" Relationship="Self.FK_Event_User" FromRole="CustomerUser" ToRole="Event" />
           <NavigationProperty Name="Meetings" Relationship="Self.FK_Meeting_User" FromRole="CustomerUser" ToRole="Meeting" />
-          <NavigationProperty Name="Customers" Relationship="MobileHubCustomerModel.FK_Customer_CustomerUser" FromRole="CustomerUser" ToRole="Customer" />
-          <Property Name="LocaleId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Locale" Relationship="MobileHubCustomerModel.FK_CustomerUser_Locale" FromRole="CustomerUser" ToRole="Locale" />
-          <NavigationProperty Name="ActionHistories" Relationship="MobileHubCustomerModel.FK_ActionHistory_CustomerUser" FromRole="CustomerUser" ToRole="ActionHistory" />
+          <NavigationProperty Name="OrderHeaders" Relationship="Self.FK_OrderHeader_CustomerUser" FromRole="CustomerUser" ToRole="OrderHeader" />
         </EntityType>
         <EntityType Name="Event">
           <Key>
@@ -552,8 +724,35 @@
           <Property Name="Purpose" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="AddressId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" />
           <NavigationProperty Name="Address" Relationship="Self.FK_Event_Address" FromRole="Event" ToRole="Address" />
           <NavigationProperty Name="CustomerUser" Relationship="Self.FK_Event_User" FromRole="Event" ToRole="CustomerUser" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OriginalItemId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="PicUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItem_Item" FromRole="Item" ToRole="OrderItem" />
+        </EntityType>
+        <EntityType Name="Locale">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LcidString" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LcidDecimal" Type="Int32" />
+          <Property Name="LcidHex" Type="Int32" />
+          <Property Name="LcidCodePage" Type="Int32" />
+          <NavigationProperty Name="AvailableActions" Relationship="Self.FK_AvailableAction_Locale" FromRole="Locale" ToRole="AvailableAction" />
+          <NavigationProperty Name="CustomerUsers" Relationship="Self.FK_CustomerUser_Locale" FromRole="Locale" ToRole="CustomerUser" />
         </EntityType>
         <EntityType Name="Meeting">
           <Key>
@@ -570,6 +769,85 @@
           <NavigationProperty Name="Customer" Relationship="Self.FK_Meeting_Customer" FromRole="Meeting" ToRole="Customer" />
           <NavigationProperty Name="CustomerUser" Relationship="Self.FK_Meeting_User" FromRole="Meeting" ToRole="CustomerUser" />
         </EntityType>
+        <EntityType Name="OrderHeader">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="AddressId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="MeetingId" Type="Int32" />
+          <Property Name="EventId" Type="Int32" />
+          <Property Name="OrderTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="TotalTax" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Address" Relationship="Self.FK_OrderHeader_Address" FromRole="OrderHeader" ToRole="Address" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_OrderHeader_Customer" FromRole="OrderHeader" ToRole="Customer" />
+          <NavigationProperty Name="CustomerUser" Relationship="Self.FK_OrderHeader_CustomerUser" FromRole="OrderHeader" ToRole="CustomerUser" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItem_OrderHeader" FromRole="OrderHeader" ToRole="OrderItem" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="ItemQuantity" Type="Int32" Nullable="false" />
+          <Property Name="ItemPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_OrderItem_Item" FromRole="OrderItem" ToRole="Item" />
+          <NavigationProperty Name="OrderHeader" Relationship="Self.FK_OrderItem_OrderHeader" FromRole="OrderItem" ToRole="OrderHeader" />
+        </EntityType>
+        <Association Name="FK_ActionHistory_Address">
+          <End Role="Address" Type="Self.Address" Multiplicity="1" />
+          <End Role="ActionHistory" Type="Self.ActionHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActionHistory">
+              <PropertyRef Name="AddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActionHistory_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="ActionHistory" Type="Self.ActionHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActionHistory">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ActionHistory_CustomerUser">
+          <End Role="CustomerUser" Type="Self.CustomerUser" Multiplicity="1" />
+          <End Role="ActionHistory" Type="Self.ActionHistory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ActionHistory">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AvailableAction_ActionType">
+          <End Role="ActionType" Type="Self.ActionType" Multiplicity="1" />
+          <End Role="AvailableAction" Type="Self.AvailableAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActionType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableAction">
+              <PropertyRef Name="ActionTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Address_Country">
           <End Role="Country" Type="Self.Country" Multiplicity="1" />
           <End Role="Address" Type="Self.Address" Multiplicity="*" />
@@ -630,6 +908,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OrderHeader_Address">
+          <End Role="Address" Type="Self.Address" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="AddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AvailableAction_CustomerType">
+          <End Role="CustomerType" Type="Self.CustomerType" Multiplicity="1" />
+          <End Role="AvailableAction" Type="Self.AvailableAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableAction">
+              <PropertyRef Name="CustomerTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AvailableAction_Locale">
+          <End Role="Locale" Type="Self.Locale" Multiplicity="1" />
+          <End Role="AvailableAction" Type="Self.AvailableAction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locale">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AvailableAction">
+              <PropertyRef Name="LocaleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Customer_CustomerCompany">
           <End Role="CustomerCompany" Type="Self.CustomerCompany" Multiplicity="1" />
           <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
@@ -639,6 +953,30 @@
             </Principal>
             <Dependent Role="Customer">
               <PropertyRef Name="CompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_CustomerType">
+          <End Role="CustomerType" Type="Self.CustomerType" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="CustomerTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Customer_CustomerUser1">
+          <End Role="CustomerUser" Type="Self.CustomerUser" Multiplicity="1" />
+          <End Role="Customer" Type="Self.Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Customer">
+              <PropertyRef Name="AccountManagersUserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -654,6 +992,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OrderHeader_Customer">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_CustomerCompany_CustomerParentCompany">
           <End Role="CustomerParentCompany" Type="Self.CustomerParentCompany" Multiplicity="0..1" />
           <End Role="CustomerCompany" Type="Self.CustomerCompany" Multiplicity="*" />
@@ -663,6 +1013,18 @@
             </Principal>
             <Dependent Role="CustomerCompany">
               <PropertyRef Name="ParentCompanyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerUser_Locale">
+          <End Role="Locale" Type="Self.Locale" Multiplicity="1" />
+          <End Role="CustomerUser" Type="Self.CustomerUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locale">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CustomerUser">
+              <PropertyRef Name="LocaleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -690,15 +1052,75 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_OrderHeader_CustomerUser">
+          <End Role="CustomerUser" Type="Self.CustomerUser" Multiplicity="1" />
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CustomerUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderHeader">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItem_Item">
+          <End Role="Item" Type="Self.Item" Multiplicity="1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="ItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItem_OrderHeader">
+          <End Role="OrderHeader" Type="Self.OrderHeader" Multiplicity="1" />
+          <End Role="OrderItem" Type="Self.OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderHeader">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MobileHubCustomerContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ActionHistories" EntityType="Self.ActionHistory" />
+          <EntitySet Name="ActionTypes" EntityType="Self.ActionType" />
           <EntitySet Name="Addresses" EntityType="Self.Address" />
+          <EntitySet Name="AvailableActions" EntityType="Self.AvailableAction" />
           <EntitySet Name="Countries" EntityType="Self.Country" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
           <EntitySet Name="CustomerCompanies" EntityType="Self.CustomerCompany" />
           <EntitySet Name="CustomerParentCompanies" EntityType="Self.CustomerParentCompany" />
+          <EntitySet Name="CustomerTypes" EntityType="Self.CustomerType" />
           <EntitySet Name="CustomerUsers" EntityType="Self.CustomerUser" />
           <EntitySet Name="Events" EntityType="Self.Event" />
+          <EntitySet Name="Items" EntityType="Self.Item" />
+          <EntitySet Name="Locales" EntityType="Self.Locale" />
           <EntitySet Name="Meetings" EntityType="Self.Meeting" />
+          <EntitySet Name="OrderHeaders" EntityType="Self.OrderHeader" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
+          <AssociationSet Name="FK_ActionHistory_Address" Association="Self.FK_ActionHistory_Address">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="ActionHistory" EntitySet="ActionHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActionHistory_Customer" Association="Self.FK_ActionHistory_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="ActionHistory" EntitySet="ActionHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ActionHistory_CustomerUser" Association="Self.FK_ActionHistory_CustomerUser">
+            <End Role="CustomerUser" EntitySet="CustomerUsers" />
+            <End Role="ActionHistory" EntitySet="ActionHistories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AvailableAction_ActionType" Association="Self.FK_AvailableAction_ActionType">
+            <End Role="ActionType" EntitySet="ActionTypes" />
+            <End Role="AvailableAction" EntitySet="AvailableActions" />
+          </AssociationSet>
           <AssociationSet Name="FK_Address_Country" Association="Self.FK_Address_Country">
             <End Role="Country" EntitySet="Countries" />
             <End Role="Address" EntitySet="Addresses" />
@@ -719,17 +1141,45 @@
             <End Role="Address" EntitySet="Addresses" />
             <End Role="Meeting" EntitySet="Meetings" />
           </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Address" Association="Self.FK_OrderHeader_Address">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AvailableAction_CustomerType" Association="Self.FK_AvailableAction_CustomerType">
+            <End Role="CustomerType" EntitySet="CustomerTypes" />
+            <End Role="AvailableAction" EntitySet="AvailableActions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AvailableAction_Locale" Association="Self.FK_AvailableAction_Locale">
+            <End Role="Locale" EntitySet="Locales" />
+            <End Role="AvailableAction" EntitySet="AvailableActions" />
+          </AssociationSet>
           <AssociationSet Name="FK_Customer_CustomerCompany" Association="Self.FK_Customer_CustomerCompany">
             <End Role="CustomerCompany" EntitySet="CustomerCompanies" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_CustomerType" Association="Self.FK_Customer_CustomerType">
+            <End Role="CustomerType" EntitySet="CustomerTypes" />
+            <End Role="Customer" EntitySet="Customers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Customer_CustomerUser1" Association="Self.FK_Customer_CustomerUser1">
+            <End Role="CustomerUser" EntitySet="CustomerUsers" />
             <End Role="Customer" EntitySet="Customers" />
           </AssociationSet>
           <AssociationSet Name="FK_Meeting_Customer" Association="Self.FK_Meeting_Customer">
             <End Role="Customer" EntitySet="Customers" />
             <End Role="Meeting" EntitySet="Meetings" />
           </AssociationSet>
+          <AssociationSet Name="FK_OrderHeader_Customer" Association="Self.FK_OrderHeader_Customer">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+          </AssociationSet>
           <AssociationSet Name="FK_CustomerCompany_CustomerParentCompany" Association="Self.FK_CustomerCompany_CustomerParentCompany">
             <End Role="CustomerParentCompany" EntitySet="CustomerParentCompanies" />
             <End Role="CustomerCompany" EntitySet="CustomerCompanies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerUser_Locale" Association="Self.FK_CustomerUser_Locale">
+            <End Role="Locale" EntitySet="Locales" />
+            <End Role="CustomerUser" EntitySet="CustomerUsers" />
           </AssociationSet>
           <AssociationSet Name="FK_Event_User" Association="Self.FK_Event_User">
             <End Role="CustomerUser" EntitySet="CustomerUsers" />
@@ -739,224 +1189,47 @@
             <End Role="CustomerUser" EntitySet="CustomerUsers" />
             <End Role="Meeting" EntitySet="Meetings" />
           </AssociationSet>
-          <AssociationSet Name="FK_Customer_CustomerUser" Association="MobileHubCustomerModel.FK_Customer_CustomerUser">
+          <AssociationSet Name="FK_OrderHeader_CustomerUser" Association="Self.FK_OrderHeader_CustomerUser">
             <End Role="CustomerUser" EntitySet="CustomerUsers" />
-            <End Role="Customer" EntitySet="Customers" />
+            <End Role="OrderHeader" EntitySet="OrderHeaders" />
           </AssociationSet>
-          <EntitySet Name="CustomerTypes" EntityType="MobileHubCustomerModel.CustomerType" />
-          <EntitySet Name="Locales" EntityType="MobileHubCustomerModel.Locale" />
-          <AssociationSet Name="FK_Customer_CustomerType" Association="MobileHubCustomerModel.FK_Customer_CustomerType">
-            <End Role="CustomerType" EntitySet="CustomerTypes" />
-            <End Role="Customer" EntitySet="Customers" />
+          <AssociationSet Name="FK_OrderItem_Item" Association="Self.FK_OrderItem_Item">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_CustomerUser_Locale" Association="MobileHubCustomerModel.FK_CustomerUser_Locale">
-            <End Role="Locale" EntitySet="Locales" />
-            <End Role="CustomerUser" EntitySet="CustomerUsers" />
-          </AssociationSet>
-          <EntitySet Name="ActionHistories" EntityType="MobileHubCustomerModel.ActionHistory" />
-          <EntitySet Name="ActionTypes" EntityType="MobileHubCustomerModel.ActionType" />
-          <EntitySet Name="AvailableActions" EntityType="MobileHubCustomerModel.AvailableAction" />
-          <AssociationSet Name="FK_ActionHistory_Address" Association="MobileHubCustomerModel.FK_ActionHistory_Address">
-            <End Role="Address" EntitySet="Addresses" />
-            <End Role="ActionHistory" EntitySet="ActionHistories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ActionHistory_Customer" Association="MobileHubCustomerModel.FK_ActionHistory_Customer">
-            <End Role="Customer" EntitySet="Customers" />
-            <End Role="ActionHistory" EntitySet="ActionHistories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ActionHistory_CustomerUser" Association="MobileHubCustomerModel.FK_ActionHistory_CustomerUser">
-            <End Role="CustomerUser" EntitySet="CustomerUsers" />
-            <End Role="ActionHistory" EntitySet="ActionHistories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AvailableAction_ActionType" Association="MobileHubCustomerModel.FK_AvailableAction_ActionType">
-            <End Role="ActionType" EntitySet="ActionTypes" />
-            <End Role="AvailableAction" EntitySet="AvailableActions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AvailableAction_CustomerType" Association="MobileHubCustomerModel.FK_AvailableAction_CustomerType">
-            <End Role="CustomerType" EntitySet="CustomerTypes" />
-            <End Role="AvailableAction" EntitySet="AvailableActions" />
-          </AssociationSet>
-          <AssociationSet Name="FK_AvailableAction_Locale" Association="MobileHubCustomerModel.FK_AvailableAction_Locale">
-            <End Role="Locale" EntitySet="Locales" />
-            <End Role="AvailableAction" EntitySet="AvailableActions" />
+          <AssociationSet Name="FK_OrderItem_OrderHeader" Association="Self.FK_OrderItem_OrderHeader">
+            <End Role="OrderHeader" EntitySet="OrderHeaders" />
+            <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
         </EntityContainer>
-        <Association Name="FK_Customer_CustomerUser">
-          <End Type="MobileHubCustomerModel.CustomerUser" Role="CustomerUser" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.Customer" Role="Customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Customer">
-              <PropertyRef Name="AccountManagersUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="CustomerType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Customers" Relationship="MobileHubCustomerModel.FK_Customer_CustomerType" FromRole="CustomerType" ToRole="Customer" />
-          <NavigationProperty Name="AvailableActions" Relationship="MobileHubCustomerModel.FK_AvailableAction_CustomerType" FromRole="CustomerType" ToRole="AvailableAction" />
-        </EntityType>
-        <EntityType Name="Locale">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="CustomerUsers" Relationship="MobileHubCustomerModel.FK_CustomerUser_Locale" FromRole="Locale" ToRole="CustomerUser" />
-          <Property Name="LcidString" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="LcidDecimal" Type="Int32" />
-          <Property Name="LcidHex" Type="Int32" />
-          <Property Name="LcidCodePage" Type="Int32" />
-          <NavigationProperty Name="AvailableActions" Relationship="MobileHubCustomerModel.FK_AvailableAction_Locale" FromRole="Locale" ToRole="AvailableAction" />
-        </EntityType>
-        <Association Name="FK_Customer_CustomerType">
-          <End Type="MobileHubCustomerModel.CustomerType" Role="CustomerType" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.Customer" Role="Customer" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Customer">
-              <PropertyRef Name="CustomerTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_CustomerUser_Locale">
-          <End Type="MobileHubCustomerModel.Locale" Role="Locale" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.CustomerUser" Role="CustomerUser" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Locale">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CustomerUser">
-              <PropertyRef Name="LocaleId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="ActionHistory">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="AddressId" Type="Int32" Nullable="false" />
-          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Address" Relationship="MobileHubCustomerModel.FK_ActionHistory_Address" FromRole="ActionHistory" ToRole="Address" />
-          <NavigationProperty Name="Customer" Relationship="MobileHubCustomerModel.FK_ActionHistory_Customer" FromRole="ActionHistory" ToRole="Customer" />
-          <NavigationProperty Name="CustomerUser" Relationship="MobileHubCustomerModel.FK_ActionHistory_CustomerUser" FromRole="ActionHistory" ToRole="CustomerUser" />
-          <Property Name="ActionCode" Type="Int32" Nullable="false" />
-          <Property Name="ActionTime" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="ActionType">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="AvailableActions" Relationship="MobileHubCustomerModel.FK_AvailableAction_ActionType" FromRole="ActionType" ToRole="AvailableAction" />
-          <Property Name="Code" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="AvailableAction">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="LocaleId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerTypeId" Type="Int32" Nullable="false" />
-          <Property Name="ActionTypeId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="ActionType" Relationship="MobileHubCustomerModel.FK_AvailableAction_ActionType" FromRole="AvailableAction" ToRole="ActionType" />
-          <NavigationProperty Name="CustomerType" Relationship="MobileHubCustomerModel.FK_AvailableAction_CustomerType" FromRole="AvailableAction" ToRole="CustomerType" />
-          <NavigationProperty Name="Locale" Relationship="MobileHubCustomerModel.FK_AvailableAction_Locale" FromRole="AvailableAction" ToRole="Locale" />
-          <Property Name="ActionCode" Type="Int32" Nullable="false" />
-        </EntityType>
-        <Association Name="FK_ActionHistory_Address">
-          <End Type="MobileHubCustomerModel.Address" Role="Address" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.ActionHistory" Role="ActionHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Address">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ActionHistory">
-              <PropertyRef Name="AddressId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ActionHistory_Customer">
-          <End Type="MobileHubCustomerModel.Customer" Role="Customer" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.ActionHistory" Role="ActionHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customer">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ActionHistory">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ActionHistory_CustomerUser">
-          <End Type="MobileHubCustomerModel.CustomerUser" Role="CustomerUser" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.ActionHistory" Role="ActionHistory" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ActionHistory">
-              <PropertyRef Name="UserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AvailableAction_ActionType">
-          <End Type="MobileHubCustomerModel.ActionType" Role="ActionType" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.AvailableAction" Role="AvailableAction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ActionType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AvailableAction">
-              <PropertyRef Name="ActionTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AvailableAction_CustomerType">
-          <End Type="MobileHubCustomerModel.CustomerType" Role="CustomerType" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.AvailableAction" Role="AvailableAction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="CustomerType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AvailableAction">
-              <PropertyRef Name="CustomerTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_AvailableAction_Locale">
-          <End Type="MobileHubCustomerModel.Locale" Role="Locale" Multiplicity="1" />
-          <End Type="MobileHubCustomerModel.AvailableAction" Role="AvailableAction" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Locale">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="AvailableAction">
-              <PropertyRef Name="LocaleId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MobileHubCustomerModelStoreContainer" CdmEntityContainer="MobileHubCustomerContext">
+          <EntitySetMapping Name="ActionHistories">
+            <EntityTypeMapping TypeName="MobileHubCustomerModel.ActionHistory">
+              <MappingFragment StoreEntitySet="ActionHistory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+                <ScalarProperty Name="ActionCode" ColumnName="ActionCode" />
+                <ScalarProperty Name="ActionTime" ColumnName="ActionTime" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ActionTypes">
+            <EntityTypeMapping TypeName="MobileHubCustomerModel.ActionType">
+              <MappingFragment StoreEntitySet="ActionType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Addresses">
             <EntityTypeMapping TypeName="MobileHubCustomerModel.Address">
               <MappingFragment StoreEntitySet="Address">
@@ -972,6 +1245,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AvailableActions">
+            <EntityTypeMapping TypeName="MobileHubCustomerModel.AvailableAction">
+              <MappingFragment StoreEntitySet="AvailableAction">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
+                <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
+                <ScalarProperty Name="ActionTypeId" ColumnName="ActionTypeId" />
+                <ScalarProperty Name="ActionCode" ColumnName="ActionCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Countries">
             <EntityTypeMapping TypeName="MobileHubCustomerModel.Country">
               <MappingFragment StoreEntitySet="Country">
@@ -984,15 +1270,15 @@
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="MobileHubCustomerModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
-                <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
-                <ScalarProperty Name="OriginalCustomerId" ColumnName="OriginalCustomerId" />
-                <ScalarProperty Name="AccountManagersUserId" ColumnName="AccountManagersUserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+                <ScalarProperty Name="AccountManagersUserId" ColumnName="AccountManagersUserId" />
+                <ScalarProperty Name="OriginalCustomerId" ColumnName="OriginalCustomerId" />
+                <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1014,11 +1300,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CustomerTypes">
+            <EntityTypeMapping TypeName="MobileHubCustomerModel.CustomerType">
+              <MappingFragment StoreEntitySet="CustomerType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CustomerUsers">
             <EntityTypeMapping TypeName="MobileHubCustomerModel.CustomerUser">
               <MappingFragment StoreEntitySet="CustomerUser">
-                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1031,6 +1325,32 @@
                 <ScalarProperty Name="Purpose" ColumnName="Purpose" />
                 <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="MobileHubCustomerModel.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OriginalItemId" ColumnName="OriginalItemId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="PicUrl" ColumnName="PicUrl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Locales">
+            <EntityTypeMapping TypeName="MobileHubCustomerModel.Locale">
+              <MappingFragment StoreEntitySet="Locale">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LcidString" ColumnName="LcidString" />
+                <ScalarProperty Name="LcidDecimal" ColumnName="LcidDecimal" />
+                <ScalarProperty Name="LcidHex" ColumnName="LcidHex" />
+                <ScalarProperty Name="LcidCodePage" ColumnName="LcidCodePage" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1047,59 +1367,30 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerTypes">
-            <EntityTypeMapping TypeName="MobileHubCustomerModel.CustomerType">
-              <MappingFragment StoreEntitySet="CustomerType">
-                <ScalarProperty Name="Name" ColumnName="Name" />
+          <EntitySetMapping Name="OrderHeaders">
+            <EntityTypeMapping TypeName="MobileHubCustomerModel.OrderHeader">
+              <MappingFragment StoreEntitySet="OrderHeader">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Locales">
-            <EntityTypeMapping TypeName="MobileHubCustomerModel.Locale">
-              <MappingFragment StoreEntitySet="Locale">
-                <ScalarProperty Name="LcidCodePage" ColumnName="LcidCodePage" />
-                <ScalarProperty Name="LcidHex" ColumnName="LcidHex" />
-                <ScalarProperty Name="LcidDecimal" ColumnName="LcidDecimal" />
-                <ScalarProperty Name="LcidString" ColumnName="LcidString" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ActionHistories">
-            <EntityTypeMapping TypeName="MobileHubCustomerModel.ActionHistory">
-              <MappingFragment StoreEntitySet="ActionHistory">
-                <ScalarProperty Name="ActionTime" ColumnName="ActionTime" />
-                <ScalarProperty Name="ActionCode" ColumnName="ActionCode" />
-                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="AddressId" ColumnName="AddressId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MeetingId" ColumnName="MeetingId" />
+                <ScalarProperty Name="EventId" ColumnName="EventId" />
+                <ScalarProperty Name="OrderTime" ColumnName="OrderTime" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="TotalTax" ColumnName="TotalTax" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ActionTypes">
-            <EntityTypeMapping TypeName="MobileHubCustomerModel.ActionType">
-              <MappingFragment StoreEntitySet="ActionType">
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="MobileHubCustomerModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItem">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AvailableActions">
-            <EntityTypeMapping TypeName="MobileHubCustomerModel.AvailableAction">
-              <MappingFragment StoreEntitySet="AvailableAction">
-                <ScalarProperty Name="ActionCode" ColumnName="ActionCode" />
-                <ScalarProperty Name="ActionTypeId" ColumnName="ActionTypeId" />
-                <ScalarProperty Name="CustomerTypeId" ColumnName="CustomerTypeId" />
-                <ScalarProperty Name="LocaleId" ColumnName="LocaleId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="ItemQuantity" ColumnName="ItemQuantity" />
+                <ScalarProperty Name="ItemPrice" ColumnName="ItemPrice" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

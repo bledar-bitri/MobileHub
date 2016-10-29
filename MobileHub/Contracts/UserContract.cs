@@ -2,7 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using LoginDatabaseContext;
+using CustomerModel;
+using SecurityModel;
 
 namespace Contracts
 {

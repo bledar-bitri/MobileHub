@@ -17,8 +17,9 @@ namespace LoginDatabaseContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Customer()
         {
-            this.Meetings = new HashSet<Meeting>();
             this.ActionHistories = new HashSet<ActionHistory>();
+            this.Meetings = new HashSet<Meeting>();
+            this.OrderHeaders = new HashSet<OrderHeader>();
         }
     
         public int Id { get; set; }
@@ -31,13 +32,15 @@ namespace LoginDatabaseContext
         public string OriginalCustomerId { get; set; }
         public int CustomerTypeId { get; set; }
     
-        public virtual Address Address { get; set; }
-        public virtual CustomerCompany CustomerCompany { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Meeting> Meetings { get; set; }
-        public virtual CustomerUser CustomerUser { get; set; }
-        public virtual CustomerType CustomerType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ActionHistory> ActionHistories { get; set; }
+        public virtual Address Address { get; set; }
+        public virtual CustomerCompany CustomerCompany { get; set; }
+        public virtual CustomerType CustomerType { get; set; }
+        public virtual CustomerUser CustomerUser { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Meeting> Meetings { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderHeader> OrderHeaders { get; set; }
     }
 }

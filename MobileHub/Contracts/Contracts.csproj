@@ -33,22 +33,23 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="UserContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LoginDatabaseContext\1 DatabaseContext.csproj">
-      <Project>{6B388114-1021-4A73-8EE5-E93DDAEC16A8}</Project>
-      <Name>1 DatabaseContext</Name>
+    <ProjectReference Include="..\CustomerModel\2 CustomerModel.csproj">
+      <Project>{ef399d86-10d3-4b8a-ab6b-232a701d0f07}</Project>
+      <Name>2 CustomerModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SecurityModel\1 SecurityModel.csproj">
+      <Project>{b1691257-f06d-4da5-ae6d-1c1ea398b95e}</Project>
+      <Name>1 SecurityModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

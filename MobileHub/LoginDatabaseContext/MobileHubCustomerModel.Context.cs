@@ -25,18 +25,21 @@ namespace LoginDatabaseContext
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<ActionHistory> ActionHistories { get; set; }
+        public virtual DbSet<ActionType> ActionTypes { get; set; }
         public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<AvailableAction> AvailableActions { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<CustomerCompany> CustomerCompanies { get; set; }
         public virtual DbSet<CustomerParentCompany> CustomerParentCompanies { get; set; }
+        public virtual DbSet<CustomerType> CustomerTypes { get; set; }
         public virtual DbSet<CustomerUser> CustomerUsers { get; set; }
         public virtual DbSet<Event> Events { get; set; }
-        public virtual DbSet<Meeting> Meetings { get; set; }
-        public virtual DbSet<CustomerType> CustomerTypes { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<Locale> Locales { get; set; }
-        public virtual DbSet<ActionHistory> ActionHistories { get; set; }
-        public virtual DbSet<ActionType> ActionTypes { get; set; }
-        public virtual DbSet<AvailableAction> AvailableActions { get; set; }
+        public virtual DbSet<Meeting> Meetings { get; set; }
+        public virtual DbSet<OrderHeader> OrderHeaders { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
     }
 }

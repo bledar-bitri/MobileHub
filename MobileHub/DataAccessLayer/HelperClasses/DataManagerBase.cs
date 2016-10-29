@@ -64,12 +64,12 @@ namespace DataAccessLayer.HelperClasses
         }
 
 
-        protected DataManagerBase(bool lazyLoadingDefault = false, bool tracking = false, TDbContext kontext = null)
+        protected DataManagerBase(bool lazyLoadingDefault = false, bool tracking = false, TDbContext context = null)
         {
             this.lazyLoadingDefault = lazyLoadingDefault;
             this.trackingDefault = tracking;
             // If a context is passed we used it
-            if (kontext != null) { this.ctx = kontext; disposeContext = false; }
+            if (context != null) { this.ctx = context; disposeContext = false; }
             else { this.ctx = new TDbContext(); }
 
             // (De-)activate of transparent (automatic) lazyLoading of the tied objects

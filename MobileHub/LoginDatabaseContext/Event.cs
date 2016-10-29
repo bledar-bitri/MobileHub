@@ -20,6 +20,7 @@ namespace LoginDatabaseContext
         public string Purpose { get; set; }
         public string Memo { get; set; }
         public int AddressId { get; set; }
+        public Nullable<int> CustomerId { get; set; }
     
         public virtual Address Address { get; set; }
         public virtual CustomerUser CustomerUser { get; set; }

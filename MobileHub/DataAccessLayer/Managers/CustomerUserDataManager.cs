@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CustomerModel;
 using DataAccessLayer.HelperClasses;
-using LoginDatabaseContext;
 
 namespace DataAccessLayer.Managers
 {
@@ -60,10 +60,10 @@ namespace DataAccessLayer.Managers
             return query.ToList();
         }
 
-        public bool AddUserToMeeting(int userId, int meetingId)
+        public bool AddUserToMeeting(int userId, string meetingId)
         {
 
-            var mf = new MeetingDataManager(kontext: ctx); // the abbreviation is NOT a coincidence
+            var mf = new MeetingDataManager(context: ctx); // the abbreviation is NOT a coincidence
 
             var meeting = mf.GetMeeting(meetingId, true);
             var user = GetUser(userId, true);

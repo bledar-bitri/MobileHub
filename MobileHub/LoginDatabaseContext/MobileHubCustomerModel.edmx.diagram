@@ -4,39 +4,47 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="daaa759f7dbb4a47b35e6bd5af25ded4" Name="Diagram1" ZoomLevel="89">
-        <EntityTypeShape EntityType="MobileHubCustomerModel.Address" Width="1.5" PointX="3" PointY="4.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.Country" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.Customer" Width="1.5" PointX="5.25" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.CustomerCompany" Width="1.5" PointX="8.25" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.CustomerParentCompany" Width="1.5" PointX="6.125" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.CustomerUser" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.Event" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.Meeting" Width="1.5" PointX="10.5" PointY="4.5" IsExpanded="true" />
+      <Diagram DiagramId="6ec0ac34c41a41e689103a3da22e55f1" Name="Diagram1">
+        <EntityTypeShape EntityType="MobileHubCustomerModel.ActionHistory" Width="1.5" PointX="5.25" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.ActionType" Width="1.5" PointX="0.75" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.Address" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.AvailableAction" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.Country" Width="1.5" PointX="0.75" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.Customer" Width="1.5" PointX="8.25" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.CustomerCompany" Width="1.5" PointX="6" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.CustomerParentCompany" Width="1.5" PointX="3.75" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.CustomerType" Width="1.5" PointX="0.75" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.CustomerUser" Width="1.5" PointX="3" PointY="13.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.Event" Width="1.5" PointX="5.25" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.Item" Width="1.5" PointX="13.5" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.Locale" Width="1.5" PointX="0.75" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.Meeting" Width="1.5" PointX="10.5" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.OrderHeader" Width="1.5" PointX="13.5" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="MobileHubCustomerModel.OrderItem" Width="1.5" PointX="15.75" PointY="13.25" IsExpanded="true" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_ActionHistory_Address" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_ActionHistory_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_ActionHistory_CustomerUser" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_AvailableAction_ActionType" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_Address_Country" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_Customer_Address" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_CustomerCompany_Address" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_Event_Address" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_Meeting_Address" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_OrderHeader_Address" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_AvailableAction_CustomerType" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_AvailableAction_Locale" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_Customer_CustomerCompany" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_Customer_CustomerType" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_Customer_CustomerUser1" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_Meeting_Customer" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_OrderHeader_Customer" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_CustomerCompany_CustomerParentCompany" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_CustomerUser_Locale" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_Event_User" ManuallyRouted="false" />
         <AssociationConnector Association="MobileHubCustomerModel.FK_Meeting_User" ManuallyRouted="false" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_Customer_CustomerUser" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.CustomerType" Width="1.5" PointX="3" PointY="8.625" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.Locale" Width="1.5" PointX="0.75" PointY="1.375" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_Customer_CustomerType" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_CustomerUser_Locale" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.ActionHistory" Width="1.5" PointX="10.5" PointY="0.75" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.ActionType" Width="1.5" PointX="7" PointY="11.5" />
-        <EntityTypeShape EntityType="MobileHubCustomerModel.AvailableAction" Width="1.5" PointX="9.25" PointY="9" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_ActionHistory_Address" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_ActionHistory_Customer" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_ActionHistory_CustomerUser" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_AvailableAction_ActionType" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_AvailableAction_CustomerType" />
-        <AssociationConnector Association="MobileHubCustomerModel.FK_AvailableAction_Locale" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_OrderHeader_CustomerUser" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_OrderItem_Item" ManuallyRouted="false" />
+        <AssociationConnector Association="MobileHubCustomerModel.FK_OrderItem_OrderHeader" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

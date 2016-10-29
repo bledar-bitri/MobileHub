@@ -89,6 +89,9 @@
       <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
     </Compile>
     <Compile Include="IgnoreEntityStatePropertyConvention.cs" />
+    <Compile Include="Item.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Locale.cs">
       <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
     </Compile>
@@ -130,6 +133,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MobileHubSecurityModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="OrderHeader.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderItem.cs">
+      <DependentUpon>MobileHubCustomerModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Role.cs">

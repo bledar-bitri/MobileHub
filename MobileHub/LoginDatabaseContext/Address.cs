@@ -17,11 +17,12 @@ namespace LoginDatabaseContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Address()
         {
+            this.ActionHistories = new HashSet<ActionHistory>();
             this.Customers = new HashSet<Customer>();
             this.CustomerCompanies = new HashSet<CustomerCompany>();
             this.Events = new HashSet<Event>();
             this.Meetings = new HashSet<Meeting>();
-            this.ActionHistories = new HashSet<ActionHistory>();
+            this.OrderHeaders = new HashSet<OrderHeader>();
         }
     
         public int Id { get; set; }
@@ -34,6 +35,8 @@ namespace LoginDatabaseContext
         public Nullable<long> Latitude { get; set; }
         public Nullable<long> Longitude { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ActionHistory> ActionHistories { get; set; }
         public virtual Country Country { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Customer> Customers { get; set; }
@@ -44,6 +47,6 @@ namespace LoginDatabaseContext
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Meeting> Meetings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ActionHistory> ActionHistories { get; set; }
+        public virtual ICollection<OrderHeader> OrderHeaders { get; set; }
     }
 }
