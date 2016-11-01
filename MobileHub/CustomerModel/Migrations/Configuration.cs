@@ -11,7 +11,7 @@ namespace CustomerModel.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             SetSqlGenerator("System.Data.SqlClient", new EntityTableSqlGenerator());
         }
 

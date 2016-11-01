@@ -17,12 +17,12 @@ namespace Utilities
             {
                 if (propInfo.MemberType == MemberTypes.Property && propInfo.Name != "TableName")
                 {
-                    string varName = propInfo.Name.Substring(0, 1).ToLower() + propInfo.Name.Substring(1);
+                    string proName = propInfo.Name.Substring(0, 1).ToLower() + propInfo.Name.Substring(1);
                     
                     sb.Append("<attribute name=\"");
-                    sb.Append(varName);
+                    sb.Append(proName);
                     sb.Append("\" optional=\"YES\" attributeType=\"");
-                    sb.Append(GetObjectiveCType(propInfo.PropertyType.Name));
+                    sb.Append(GetObjectiveCType(propInfo.PropertyType.Name, proName));
                     sb.Append("\" syncable=\"YES\"/>");
                     sb.Append(Environment.NewLine);
                 }
@@ -32,24 +32,39 @@ namespace Utilities
             return sb.ToString();
         }
 
-        public static string GetObjectiveCType(string csharpType)
+        public static string GetCoreDataEntityPosition(Type type, int positionX, int positionY)
         {
+            return
+                $"<element name=\"{type.Name}\" positionX=\"{positionX}\" positionY=\"{positionY}\" width=\"150\" height=\"100\"/>{Environment.NewLine}";
+        }
+
+        public static string GetObjectiveCType(string csharpType, string propName)
+        {
+
+
+            if (propName.Equals("createdAt", StringComparison.InvariantCultureIgnoreCase) ||
+                propName.Equals("updatedAt", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return "Date";
+            }
+
             csharpType = csharpType.ToLower();
+
             if (csharpType.StartsWith("int"))
             {
                 return "Integer 64";
             }
-            else if (csharpType == "decimal" || csharpType == "double")
+            if (csharpType == "decimal" || csharpType == "double")
             {
                 return "Double";
             }
-            else if (csharpType == "boolean")
+            if (csharpType == "boolean")
             {
                 return "Boolean";
             }
-            else if (csharpType == "datetime")
+            if (csharpType == "datetime" || csharpType == "datetimeoffset")
             {
-                return "NSDate";
+                return "Date";
             }
             return "String";
         }

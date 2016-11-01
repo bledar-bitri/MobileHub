@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using CustomerModel;
 using DataAccessLayer.HelperClasses;
@@ -38,12 +39,22 @@ namespace DataAccessLayer.Managers
         }
 
 
-        public List<Customer> GetCustomers(string name)
+        public List<Customer> GetAllCustomers()
         {
-            var query = from p in ctx.Customers where p.FirstName.Contains(name) || p.LastName.Contains(name) select p;
-            return query.ToList();
+            return GetCustomers(null);
         }
 
+
+        public List<Customer> GetCustomers(string name)
+        {
+            IQueryable<Customer> query = ctx.Customers;
+            if (!string.IsNullOrEmpty(name))
+                query = query.Where(p => p.FirstName.Contains(name) || p.LastName.Contains(name));
+
+            //query = query.Include(p => p.Address);
+
+            return query.ToList();
+        }
 
         public List<Customer> GetCustomerByAccountManager(int accountManagerId)
         {

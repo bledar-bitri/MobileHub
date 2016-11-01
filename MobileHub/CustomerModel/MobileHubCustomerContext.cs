@@ -66,36 +66,7 @@ namespace CustomerModel
             modelBuilder.Entity<Address>()
                 .Property(e => e.Zip)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Address>()
-                .HasMany(e => e.ActionHistories)
-                .WithRequired(e => e.Address)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Address>()
-                .HasMany(e => e.Customers)
-                .WithRequired(e => e.Address)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Address>()
-                .HasMany(e => e.CustomerCompanies)
-                .WithRequired(e => e.Address)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Address>()
-                .HasMany(e => e.Events)
-                .WithRequired(e => e.Address)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Address>()
-                .HasMany(e => e.Meetings)
-                .WithRequired(e => e.Address)
-                .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<Address>()
-                .HasMany(e => e.OrderHeaders)
-                .WithRequired(e => e.Address)
-                .WillCascadeOnDelete(false);
+            
 
             modelBuilder.Entity<AvailableAction>()
                 .Property(e => e.Name)
@@ -112,12 +83,7 @@ namespace CustomerModel
             modelBuilder.Entity<Country>()
                 .Property(e => e.Name)
                 .IsUnicode(false);
-
-            modelBuilder.Entity<Country>()
-                .HasMany(e => e.Addresses)
-                .WithRequired(e => e.Country)
-                .WillCascadeOnDelete(false);
-
+            
             modelBuilder.Entity<Customer>()
                 .Property(e => e.FirstName)
                 .IsUnicode(false);
@@ -135,7 +101,7 @@ namespace CustomerModel
                 .IsUnicode(false);
 
             modelBuilder.Entity<Customer>()
-                .HasMany(e => e.ActionHistories)
+                .HasMany(e => e.ActionHistory)
                 .WithRequired(e => e.Customer)
                 .WillCascadeOnDelete(false);
 

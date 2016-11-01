@@ -9,7 +9,7 @@ using Services;
 
 namespace MobileHumWebApi.Controllers
 {
-    public class UserController : ApiController
+    public class UserContractController : ApiController
     {
         // GET: api/User
         public IEnumerable<UserContract> Get()
