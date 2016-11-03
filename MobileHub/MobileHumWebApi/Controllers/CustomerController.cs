@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Controllers;
@@ -23,21 +24,15 @@ namespace MobileHumWebApi.Controllers
         }
 
         // GET: table/Customer
-        public IEnumerable<CustomerContract> Get()
+        public IQueryable<Customer> Get()
         {
-            using (var service = new CustomerService())
-            {
-                return service.GetAllCustomerContracts();
-            }
+            return Query();
         }
 
         // GET tables/Customer/48D68C86-6EA6-4C25-AA33-223FC9A27959
-        public Customer GetCustomer(string id)
+        public SingleResult<Customer> GetCustomer(string id)
         {
-            using (var service = new CustomerService())
-            {
-                return service.GetCustomer(id);
-            }
+            return Lookup(id);
         }
 
 
