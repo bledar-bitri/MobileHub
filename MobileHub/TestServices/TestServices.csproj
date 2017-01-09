@@ -33,22 +33,41 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>TestServices.TestServices</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestRouteService.cs" />
     <Compile Include="TestPasswordService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Services\Services.csproj">
-      <Project>{69aac7af-af35-46c6-b347-8fac4f41d6f5}</Project>
-      <Name>Services</Name>
+    <ProjectReference Include="..\3 RouteModel\3 RouteModel.csproj">
+      <Project>{e3f6180e-edb7-4bc2-9b7d-7c1224379eb9}</Project>
+      <Name>3 RouteModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CustomerModel\2 CustomerModel.csproj">
+      <Project>{ef399d86-10d3-4b8a-ab6b-232a701d0f07}</Project>
+      <Name>2 CustomerModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\1 Services.csproj">
+      <Project>{69aac7af-af35-46c6-b347-8fac4f41d6f5}</Project>
+      <Name>1 Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,8 +12,6 @@ namespace MobileHumWebApi.Controllers
 {
     public class AddressController : TableController<Address>
     {
-
-
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);

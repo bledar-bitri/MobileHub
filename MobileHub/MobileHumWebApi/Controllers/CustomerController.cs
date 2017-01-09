@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -37,9 +38,18 @@ namespace MobileHumWebApi.Controllers
 
 
         // PATCH tables/Customer/48D68C86-6EA6-4C25-AA33-223FC9A27959
-        public Task<Customer> PatchCustomer(string id, Delta<Customer> patch)
+        public async Task<Customer> PatchCustomer(string id, Delta<Customer> patch)
         {
-            return UpdateAsync(id, patch);
+            try
+            {
+                var current = await UpdateAsync(id, patch);
+                return current;
+            }
+            catch
+            {
+                var current = await UpdateAsync(id, patch);
+                return current;
+            }
         }
 
         // POST tables/Customer

@@ -10,8 +10,10 @@ namespace Services
         List<Address> GetAllAddresses();
         Address GetAddress(string id);
 
-
+        void SaveAddresses(List<Address> addresses);
+        void SaveAddress(Address address);
         #endregion
 
+        void LoadGeocodeInformation(Address address);
     }
 }

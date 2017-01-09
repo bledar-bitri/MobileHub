@@ -12,9 +12,11 @@ namespace PopulateMobileHub
             Console.WriteLine("*****************************************************\n\n");
 
 
-            var securityUsers = SecurityDatabasePopulator.Populate();
-            CustomerDatabasePopulator.Populate(securityUsers);
-            
+            //var securityUsers = SecurityDatabasePopulator.Populate();
+            //CustomerDatabasePopulator.Populate(securityUsers);
+            new RouteDatabasePopulator().Populate();
+
+            Console.ReadLine();
         }
     }
 }

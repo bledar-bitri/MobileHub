@@ -61,9 +61,9 @@
       <Project>{EF399D86-10D3-4B8A-AB6B-232A701D0F07}</Project>
       <Name>2 CustomerModel</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataAccessLayer\3 DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\4 DataAccessLayer.csproj">
       <Project>{b9b8881f-ddfa-4b86-9585-3e3cda230e4c}</Project>
-      <Name>3 DataAccessLayer</Name>
+      <Name>4 DataAccessLayer</Name>
     </ProjectReference>
     <ProjectReference Include="..\SecurityModel\1 SecurityModel.csproj">
       <Project>{B1691257-F06D-4DA5-AE6D-1C1EA398B95E}</Project>

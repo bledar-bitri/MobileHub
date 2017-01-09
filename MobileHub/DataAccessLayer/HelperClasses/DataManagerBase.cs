@@ -176,18 +176,38 @@ namespace DataAccessLayer.HelperClasses
                 // insert in this context
                 ctx.Set<TEntity>().Attach((TEntity)o);
                 // distinction based on the primary key for auto-values
-                // 0 -> new
-                if (o.Id == 0)
+                if (o.Id is int)
                 {
-                    ctx.Entry(o).State = EntityState.Added;
-                    // keep track of new records, because we need to return them after they are saved (because they get their IDs during the save process)
-                    newItemsList.Add(o);
+                    // 0 -> new 
+                    if (o.Id == 0)
+                    {
+                        ctx.Entry(o).State = EntityState.Added;
+                        // keep track of new records, because we need to return them after they are saved (because they get their IDs during the save process)
+                        newItemsList.Add(o);
+                    }
+                    else
+                    {
+                        // not 0 -> changed
+                        ctx.Entry(o).State = EntityState.Modified;
+                    }
                 }
-                else
+
+                if (o.Id is string)
                 {
-                    // not 0 -> changed
-                    ctx.Entry(o).State = EntityState.Modified;
+                    // null or empty -> new 
+                    if (string.IsNullOrEmpty(o.Id))
+                    {
+                        ctx.Entry(o).State = EntityState.Added;
+                        // keep track of new records, because we need to return them after they are saved (because they get their IDs during the save process)
+                        newItemsList.Add(o);
+                    }
+                    else
+                    {
+                        // -> changed
+                        ctx.Entry(o).State = EntityState.Modified;
+                    }
                 }
+
             }
 
             // compile statistics of the changes
