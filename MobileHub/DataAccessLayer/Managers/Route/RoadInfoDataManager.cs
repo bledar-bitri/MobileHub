@@ -36,10 +36,11 @@ namespace DataAccessLayer.Managers.Route
                         select r;
 
             if(includeInverse)
-                query.Where(r => 
-                (r.FromLatitude == fromLatitude && r.FromLongitude == fromLongitude && r.ToLatitude == toLatitude && r.ToLongitude == toLongitude) ||
-                (r.FromLatitude == toLatitude && r.FromLongitude == toLongitude && r.ToLatitude == fromLatitude && r.ToLongitude == fromLongitude));
-
+                query = from r in Query<RoadInfo>(tracking)
+                        where (r.FromLatitude == fromLatitude && r.FromLongitude == fromLongitude && r.ToLatitude == toLatitude && r.ToLongitude == toLongitude) ||
+                                (r.FromLatitude == toLatitude && r.FromLongitude == toLongitude && r.ToLatitude == fromLatitude && r.ToLongitude == fromLongitude)
+                        select r;
+            
             return query.SingleOrDefault();
         }
 
@@ -56,10 +57,18 @@ namespace DataAccessLayer.Managers.Route
             
             return query.ToList();
         }
-        
-        public List<RoadInfo> SaveRoadInfo(List<RoadInfo> roadInfo, out string statistics)
+
+        public void SaveRoadInfo(RoadInfo roadInfo, out string statistics)
         {
-            return Save(roadInfo, out statistics);
+            SaveRoadInfo(new List<RoadInfo>{ roadInfo }, out statistics);
+        }
+        public void SaveRoadInfo(List<RoadInfo> roadInfoList, out string statistics)
+        {
+            statistics = "NO STATS DEFINED";
+            foreach (var o in roadInfoList)
+            {
+                ctx.AddRoadInfo((int)o.FromLatitude, (int)o.FromLongitude, (int)o.ToLatitude, (int)o.ToLongitude, (int)o.Distance, (int)o.TimeInSeconds);
+            }
         }
     }
 }

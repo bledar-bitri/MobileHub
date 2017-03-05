@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
+using Newtonsoft.Json;
+using Parameters;
+using Utilities;
 
 namespace RouteInfoLoaderWorkerRole
 {
@@ -16,6 +13,8 @@ namespace RouteInfoLoaderWorkerRole
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
+        public static string QueueName = "routegeneration";
+        private static MobileAppCloudQueue queue;
 
         public override void Run()
         {
@@ -42,6 +41,7 @@ namespace RouteInfoLoaderWorkerRole
             bool result = base.OnStart();
 
             Trace.TraceInformation("RouteInfoLoaderWorkerRole has been started");
+            queue = new MobileAppCloudQueue(QueueName);
 
             return result;
         }
@@ -65,6 +65,13 @@ namespace RouteInfoLoaderWorkerRole
             {
                 Trace.TraceInformation("Working");
                 await Task.Delay(1000);
+                var msg = queue.GetMessage();
+                if (msg != null)
+                {
+                    var requestParams = JsonConvert.DeserializeObject<RouteRequestParameters>(msg.AsString);
+                    Trace.TraceInformation($"Params UserID: {requestParams.UserId}");
+                    queue.DeleteMessage(msg);
+                }
             }
         }
     }

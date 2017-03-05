@@ -162,7 +162,7 @@ namespace DataAccessLayer.HelperClasses
 
 
         /// <summary>
-        /// Save detached entity objects with AutoNumber primary key
+        /// Save detached entity objects (can handle AutoNumber primary key)
         /// The newly added objects must be returned to the called because the IDs are assigned by the database during the Save method
         /// </summary>
         protected List<TEntity> Save<TEntity>(IEnumerable<TEntity> entities, out string statistics)

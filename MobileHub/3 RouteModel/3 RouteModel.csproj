@@ -51,16 +51,52 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MobileHubRouteContext.cs" />
+    <Compile Include="MobileHubRouteModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileHubRouteModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MobileHubRouteModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileHubRouteModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MobileHubRouteModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MobileHubRouteModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoadInfo.cs" />
+    <Compile Include="RoadInfo.cs">
+      <DependentUpon>MobileHubRouteModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
+    <EntityDeploy Include="MobileHubRouteModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MobileHubRouteModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="MobileHubRouteModel.edmx.diagram">
+      <DependentUpon>MobileHubRouteModel.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AddRoadInfo.sql" />
+    <Content Include="MobileHubRouteModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MobileHubRouteModel.edmx</DependentUpon>
+      <LastGenOutput>MobileHubRouteModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="MobileHubRouteModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MobileHubRouteModel.edmx</DependentUpon>
+      <LastGenOutput>MobileHubRouteModel.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

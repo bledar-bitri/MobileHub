@@ -28,7 +28,7 @@ namespace TestWorkerRoles
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(string.Format("Error while reading input: {0}", e.Message));
+                    Console.WriteLine($"Error while reading input: {e.Message}");
                     Console.ReadLine();
                     userId = "-1";
                 }

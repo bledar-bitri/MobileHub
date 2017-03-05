@@ -16,7 +16,7 @@ namespace Utilities
             return (int) (geoCoordinate * ToIntegerMultiplier);
         }
 
-        public static double ToGeoCoordinate(int intValue)
+        public static double ToGeoCoordinate(long intValue)
         {
             return intValue * ToGeoCoordinateMultiplier;
         }

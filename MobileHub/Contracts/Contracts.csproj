@@ -84,6 +84,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressContract.cs" />
     <Compile Include="BingMapsRESTServiceDataContracts.cs" />
     <Compile Include="CustomerContract.cs" />
     <Compile Include="GeocodeLocation.cs" />

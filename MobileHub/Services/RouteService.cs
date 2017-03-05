@@ -2,6 +2,13 @@
 using RouteModel;
 using DataAccessLayer.Managers.Route;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Json;
+using System.Threading;
+using Common;
+using Contracts;
 using Utilities;
 
 namespace Services
@@ -9,6 +16,9 @@ namespace Services
     public class RouteService : IRouteService, IDisposable
     {
         private readonly RoadInfoDataManager _roadInfoManager = new RoadInfoDataManager();
+        private static readonly Object SynchLocker = new Object();
+
+        private static int webLookupCount;
 
         public RoadInfo GetRoadInfo(int fromLatitude, int fromLongitude, int toLatitude, int toLongitude)
         {
@@ -27,7 +37,32 @@ namespace Services
 
         #region Road Distance
 
+        public void LoadDistances(List<AddressContract> addresses)
+        {
+            foreach (var address in addresses)
+            {
+                webLookupCount = 0;
+                LoadDistances(address, addresses);
+                Trace.TraceInformation($"From: [{address.Latitude} {address.Longitude}] Weblookup: {webLookupCount}");
+            }
+        }
 
+        public void LoadDistances(AddressContract currentAddress, List<AddressContract> addresses)
+        {
+            if (currentAddress?.Latitude == null || !currentAddress.Longitude.HasValue) return;
+
+            foreach (var address in addresses)
+            {
+                if (currentAddress.Id == address.Id) continue;
+
+                if (address.Latitude.HasValue && address.Longitude.HasValue)
+                    LoadDistances(GeoCodeConverter.ToGeoCoordinate(currentAddress.Latitude.Value),
+                        GeoCodeConverter.ToGeoCoordinate(currentAddress.Longitude.Value),
+                        GeoCodeConverter.ToGeoCoordinate(address.Latitude.Value),
+                        GeoCodeConverter.ToGeoCoordinate(address.Longitude.Value)
+                        );
+            }
+        }
         public void LoadDistances(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude)
         {
             try
@@ -47,221 +82,86 @@ namespace Services
                 GeoCodeConverter.ToInteger(fromLatitude),
                 GeoCodeConverter.ToInteger(fromLongitude),
                 GeoCodeConverter.ToInteger(toLatitude),
-                GeoCodeConverter.ToInteger(toLongitude));
+                GeoCodeConverter.ToInteger(toLongitude),
+                true);
 
             if (roadDistance == null)
             {
-                SetGeocodeDistance(road, tries);
+                SetGeocodeDistance(fromLatitude, fromLongitude, toLatitude, toLongitude, tries);
             }
             // Lookup distance online if older than 6 months (maybe roads changed...)
-            else if (DateTime.Now.Subtract(roadDistance.LookupDate).TotalDays > 180)
+            else if (roadDistance.LookupDate == null || DateTime.Now.Subtract(roadDistance.LookupDate.Value).TotalDays > 180)
             {
-                if (!Stop)
-                    SetGeocodeDistance(road, tries, true);
+                SetGeocodeDistance(fromLatitude, fromLongitude, toLatitude, toLongitude, tries, true);
             }
             else
             {
+                /*
                 if (!Stop)
                 {
                     road.Distance = roadDistance.Distance;
                     road.TravelTimeInSeconds = roadDistance.TimeInSeconds;
                 }
+                */
             }
         }
 
         private void SetGeocodeDistance(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude, int tries, bool updateDistance = false)
         {
-            try
+            var query = $"wp.0={fromLatitude},{fromLongitude}&wp.1={toLatitude},{toLongitude}";
+            var geocodeRequest = new Uri($"http://dev.virtualearth.net/REST/v1/Routes/Driving?{query}&key={CommonConfigValues.BingMapsKey}");
+            var road = new RoadInfo
             {
-                var query = string.Format("{0}, {1}, {2}, {3}", address.Street, address.Zip, address.City, address.Country.Name);
-                Uri geocodeRequest = new Uri(string.Format("http://dev.virtualearth.net/REST/v1/Locations?q={0}&key={1}", query, CommonConfigValues.BingMapsKey));
-                //Parse user data to create array of waypoints
-
-                var waypoints = new Waypoint[2];
-
-                waypoints[0] = new Waypoint { Location = new RouteService.Location { Latitude = road.From.Location.Locations[0].Latitude, Longitude = road.From.Location.Locations[0].Longitude } };
-                waypoints[1] = new Waypoint { Location = new RouteService.Location { Latitude = road.To.Location.Locations[0].Latitude, Longitude = road.To.Location.Locations[0].Longitude } };
-                Log.Info(string.Format("Setting Geocode Distance FROM: Latitude {0}, Longitude {1}", road.From.Location.Locations[0].Latitude, road.From.Location.Locations[0].Longitude));
-                routeRequest.Waypoints = waypoints;
-                routeRequest.Options = new RouteOptions { Optimization = RouteOptimization.MinimizeDistance };
-
-                // Make the calculate route request
-                var routeService = new RouteServiceClient("BasicHttpBinding_IRouteService");
-                if (!Stop)
-                {
-                    RouteResponse routeResponse = routeService.CalculateRoute(routeRequest);
-                    road.Distance = routeResponse.Result.Summary.Distance;
-                    road.TravelTimeInSeconds = routeResponse.Result.Summary.TimeInSeconds;
-                    if (updateDistance)
-                    {
-                        if (!Stop)
-                            UpdateDistance(road);
-                    }
-                    else
-                    {
-                        if (!Stop)
-                            InsertDistance(road);
-                    }
-                }
-            }
-            catch (ThreadAbortException tae)
-            {
-                Log.Error("Cought ThreadAbortException [SetGeocodeDistance]");
-                IsRunning = false;
-                return;
-            }
-            catch (Exception e)
-            {
-                //                Console.WriteLine("Trying to Recalculate Distance " + tries);
-                if (!Stop)
-                {
-                    if (tries > 0)
-                    {
-                        SetGeocodeDistance(road, tries - 1, updateDistance);
-                    }
-                    Log.Error(string.Format("Could Not Calculate Distance [FROM: {0}, {1}] TO [{2}, {3}] " +
-                        e.Message,
-                        road.From.Location.Locations[0].Latitude.ToString().Replace(",", "."),
-                        road.From.Location.Locations[0].Longitude.ToString().Replace(",", "."),
-                        road.To.Location.Locations[0].Latitude.ToString().Replace(",", "."),
-                        road.To.Location.Locations[0].Longitude.ToString().Replace(",", "."))
-                        , e);
-                }
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        private void InsertRoadInfo(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude, double distance, int travelTimeInSeconds)
-        {
-            if (!Stop)
-            {
-                var rec = new tblRoad
-                {
-                    Distance = road.Distance,
-                    TimeInSeconds = road.TravelTimeInSeconds,
-                    LookupDate = DateTime.Now
-                };
-                if (road.From.Location.Locations[0].Latitude >= road.To.Location.Locations[0].Latitude)
-                {
-                    rec.FromLatitude = RoutePlanerManager.GetIntFromCoordinate(road.From.Location.Locations[0].Latitude);
-                    rec.FromLongitude = RoutePlanerManager.GetIntFromCoordinate(road.From.Location.Locations[0].Longitude);
-                    rec.ToLatitude = RoutePlanerManager.GetIntFromCoordinate(road.To.Location.Locations[0].Latitude);
-                    rec.ToLongitude = RoutePlanerManager.GetIntFromCoordinate(road.To.Location.Locations[0].Longitude);
-                }
-                else
-                {
-                    rec.FromLatitude = RoutePlanerManager.GetIntFromCoordinate(road.To.Location.Locations[0].Latitude);
-                    rec.FromLongitude = RoutePlanerManager.GetIntFromCoordinate(road.To.Location.Locations[0].Longitude);
-                    rec.ToLatitude = RoutePlanerManager.GetIntFromCoordinate(road.From.Location.Locations[0].Latitude);
-                    rec.ToLongitude = RoutePlanerManager.GetIntFromCoordinate(road.From.Location.Locations[0].Longitude);
-                }
-                //AppendToUpdateDistanceCommand(new RecordSet(DbConnection.ConnectionType_DB2).GetDbInsertStatement(rec));
-                AppendToUpdateDistanceCommand(rec);
-            }
-        }
-
-        private void UpdateRoadInfo(Road road)
-        {
-            if (!Stop)
-            {
-                var rec = new tblRoad
-                {
-                    Distance = road.Distance,
-                    TimeInSeconds = road.TravelTimeInSeconds,
-                    LookupDate = DateTime.Now
-                };
-                if (road.From.Location.Locations[0].Latitude >= road.To.Location.Locations[0].Latitude)
-                {
-                    rec.FromLatitude = RoutePlanerManager.GetIntFromCoordinate(road.From.Location.Locations[0].Latitude);
-                    rec.FromLongitude = RoutePlanerManager.GetIntFromCoordinate(road.From.Location.Locations[0].Longitude);
-                    rec.ToLatitude = RoutePlanerManager.GetIntFromCoordinate(road.To.Location.Locations[0].Latitude);
-                    rec.ToLongitude = RoutePlanerManager.GetIntFromCoordinate(road.To.Location.Locations[0].Longitude);
-                }
-                else
-                {
-                    rec.FromLatitude = RoutePlanerManager.GetIntFromCoordinate(road.To.Location.Locations[0].Latitude);
-                    rec.FromLongitude = RoutePlanerManager.GetIntFromCoordinate(road.To.Location.Locations[0].Longitude);
-                    rec.ToLatitude = RoutePlanerManager.GetIntFromCoordinate(road.From.Location.Locations[0].Latitude);
-                    rec.ToLongitude = RoutePlanerManager.GetIntFromCoordinate(road.From.Location.Locations[0].Longitude);
-                }
-                AppendToUpdateDistanceCommand(rec);
-            }
-        }
-        
-        private void AppendToUpdateDistanceCommand(tblRoad road)
-        {
-
-            // TOTO incorporate the following statement:
-            var command = string.Format("MERGE INTO {0}tblRoad AS mt USING ( " +
-                                        "SELECT * FROM TABLE ( " +
-                                        "   VALUES  " +
-                                        "        ( {1}, {2}, {3}, {4}, {5}, {6}, '{7}') " +
-                                        ") " +
-                                        ") AS vt(FromLatitude, FromLongitude, ToLatitude, ToLongitude, TimeInSeconds, Distance, LookupDate) ON (" +
-                                        "(mt.FromLatitude = vt.FromLatitude AND mt.FromLongitude = vt.FromLongitude AND mt.ToLatitude = vt.ToLatitude AND mt.ToLongitude = vt.ToLongitude) " +
-                                        "OR  (mt.ToLatitude = vt.FromLatitude AND mt.ToLongitude = vt.FromLongitude AND mt.FromLatitude = vt.ToLatitude AND mt.FromLongitude = vt.ToLongitude) " +
-                                        ") " +
-                                        "WHEN MATCHED THEN " +
-                                        "    UPDATE SET LookupDate = vt.LookupDate, Distance = vt.Distance " +
-                                        "WHEN NOT MATCHED THEN " +
-                                        "    INSERT (FromLatitude, FromLongitude, ToLatitude, ToLongitude, TimeInSeconds, Distance, LookupDate) VALUES (vt.FromLatitude, vt.FromLongitude, vt.ToLatitude, vt.ToLongitude, vt.TimeInSeconds, vt.Distance, vt.LookupDate) " +
-                                        "; ",
-                                        RecordSet.GetDB2SchemaName(),
-                                        road.FromLatitude,
-                                        road.FromLongitude,
-                                        road.ToLatitude,
-                                        road.ToLongitude,
-                                        road.TimeInSeconds,
-                                        road.Distance,
-                                        string.Format("{0:u}", road.LookupDate).Replace("Z", ""));
-
-           
-            
-
-            if (RoadDistanceCalculatorThreadMonitor.NumberOfSQLCommands < 100) return;
-            try
-            {
-                lock (lockObj)
-                {
-                    var set = new RecordSet(DbConnection.ConnectionType_DB2);
-                    if (!Stop)
-                        set.ExecuteNonQuery(RoadDistanceCalculatorThreadMonitor.DistanceUpdateCommands.ToString());
-                }
-            }
-            catch (ThreadAbortException tae)
-            {
-                Log.Error("Cought ThreadAbortException [AppendToUpdateDistanceCommand]", tae);
-                IsRunning = false;
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex);
-                Log.Error(RoadDistanceCalculatorThreadMonitor.DistanceUpdateCommands.ToString());
-            }
-            finally
-            {
-                lock (lockObj)
-                {
-                    RoadDistanceCalculatorThreadMonitor.DistanceUpdateCommands.Clear();
-                    RoadDistanceCalculatorThreadMonitor.NumberOfSQLCommands = 0;
-                }
-            }
-        }
-
-        private tblRoad GetSwitchedFromAndToRoad(tblRoad rec)
-        {
-
-            return new tblRoad
-            {
-                ToLatitude = rec.FromLatitude,
-                ToLongitude = rec.FromLongitude,
-                FromLatitude = rec.ToLatitude,
-                FromLongitude = rec.ToLongitude,
-                Distance = rec.Distance,
-                LookupDate = rec.LookupDate,
-                TimeInSeconds = rec.TimeInSeconds,
+                FromLatitude = GeoCodeConverter.ToInteger(fromLatitude),
+                FromLongitude = GeoCodeConverter.ToInteger(fromLongitude),
+                ToLatitude = GeoCodeConverter.ToInteger(toLatitude),
+                ToLongitude = GeoCodeConverter.ToInteger(toLongitude),
+                LookupDate = DateTime.UtcNow
             };
+
+            GetResponse(geocodeRequest, road, SetGeocodeDistanceFromResponse);
+        }
+
+
+        private void SetGeocodeDistanceFromResponse(Response response, RoadInfo road)
+        {
+            if (response.ResourceSets[0].Resources.Length > 0)
+            {
+                foreach (var resource in response.ResourceSets[0].Resources)
+                {
+                    var res = resource as Route;
+                    if (res == null) continue;
+                    // save road info
+                    using (var manager = new RoadInfoDataManager()) // need to reopen the database context because of the async nature of the call
+                    {
+                        lock (SynchLocker)
+                        {
+                            webLookupCount++;
+                            string stats;
+                            road.Distance = res.TravelDistance;
+                            road.TimeInSeconds = (long) res.TravelDuration;
+                            manager.SaveRoadInfo(road, out stats);
+                        }
+                    }
+                    //Trace.TraceInformation($"From: [{road.FromLatitude} {road.FromLongitude}] --> [{road.ToLatitude} {road.ToLongitude}] Distance: {road.Distance}");
+                }
+            }
+        }
+
+        private void GetResponse(Uri uri, RoadInfo road, Action<Response, RoadInfo> callback)
+        {
+            var wc = new WebClient();
+            wc.OpenReadCompleted += (o, a) =>
+            {
+                if (callback != null)
+                {
+                    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Response));
+                    callback(ser.ReadObject(a.Result) as Response, road);
+                }
+            };
+            wc.OpenReadAsync(uri);
         }
         #endregion
+        
     }
 }

@@ -14,7 +14,8 @@ namespace Services
     public class AddressService : IAddressService, IDisposable
     {
         private readonly AddressDataManager _manager = new AddressDataManager();
-        
+        private static readonly Object SynchLocker = new Object();
+
         public List<CustomerModel.Address> GetAllAddresses()
         {
             var addresses = _manager.GetAllAddresses();
@@ -55,8 +56,8 @@ namespace Services
          */
         private void LoadGeocodeCoordinatesFromWeb(CustomerModel.Address address)
         {
-            var query = string.Format("{0}, {1}, {2}, {3}", address.Street, address.Zip, address.City, address.Country.Name);
-            Uri geocodeRequest = new Uri(string.Format("http://dev.virtualearth.net/REST/v1/Locations?q={0}&key={1}", query, CommonConfigValues.BingMapsKey));
+            var query = $"{address.Street}, {address.Zip}, {address.City}, {address.Country.Name}";
+            Uri geocodeRequest = new Uri($"http://dev.virtualearth.net/REST/v1/Locations?q={query}&key={CommonConfigValues.BingMapsKey}");
 
             GetResponse(geocodeRequest, address, GetGeocodeLocationFromResponse);
             
@@ -86,25 +87,23 @@ namespace Services
             {
                 foreach (var resource in response.ResourceSets[0].Resources)
                 {
-                    if (resource is Location)
+                    var fromResponse = resource as Location;
+                    if (fromResponse == null) continue;
+
+                    var locationFromResponse = fromResponse;
+                    address.Latitude = GeoCodeConverter.ToInteger(locationFromResponse.Point.Coordinates[0]);
+                    address.Longitude = GeoCodeConverter.ToInteger(locationFromResponse.Point.Coordinates[1]);
+                    
+                    using (var manager = new AddressDataManager()) // need to reopen the database context because of the async nature of the call
                     {
-                        var locationFromResponse = (Contracts.Location)resource;
-                        address.Latitude = GeoCodeConverter.ToInteger(locationFromResponse.Point.Coordinates[0]);
-                        address.Longitude = GeoCodeConverter.ToInteger(locationFromResponse.Point.Coordinates[1]);
-                        var location = new GeocodeLocation
-                        {
-                            Latitude = locationFromResponse.Point.Coordinates[0],
-                            Longitude = locationFromResponse.Point.Coordinates[1]
-                        };
-                        using (var manager = new AddressDataManager()) // need to reopen the database context because of the async nature of the call7
+                        lock (SynchLocker)
                         {
                             string stats;
-                            manager.SaveAddress(new List<CustomerModel.Address> { address }, out stats);
+                            manager.SaveAddress(new List<CustomerModel.Address> {address}, out stats);
                         }
-                        Console.WriteLine("{0} result(s) found for Address {1}", response.ResourceSets[0].Resources.Length, locationFromResponse.Name);
-                        Console.WriteLine("\t\t [{0}] [{1}]", locationFromResponse.Point.Coordinates[0], locationFromResponse.Point.Coordinates[1]);
-                        
                     }
+                    Console.WriteLine("{0} result(s) found for Address {1}", response.ResourceSets[0].Resources.Length, locationFromResponse.Name);
+                    Console.WriteLine("\t\t [{0}] [{1}]", locationFromResponse.Point.Coordinates[0], locationFromResponse.Point.Coordinates[1]);
                 }
             }
         }
