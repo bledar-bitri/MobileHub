@@ -27,11 +27,14 @@ namespace TestServices
 
                 });//*/
                 Console.WriteLine("Address Contracts");
+                int count = 0;
                 addresses.ForEach(a =>
                 {
                     if (a.Latitude.HasValue && a.Longitude.HasValue)
                     {
-                        addressContracs.Add(new AddressContract(a));
+                        if (count++ < 20)
+                            addressContracs.Add(new AddressContract(a));
+                            
                     }
                 });
             }
@@ -39,7 +42,8 @@ namespace TestServices
             using (var service = new RouteService())
             {
                 Console.WriteLine("Loading Distances");
-                service.LoadDistances(addressContracs);
+                var distances = service.LoadDistances(addressContracs);
+                Console.WriteLine($"{distances.Count} Distances Loaded");
             }
             Console.WriteLine("================ DONE ================");
         }

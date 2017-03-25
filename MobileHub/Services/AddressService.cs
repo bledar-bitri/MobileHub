@@ -6,6 +6,7 @@ using Google.Api.Maps.Service;
 using Contracts;
 using System.Net;
 using System.Runtime.Serialization.Json;
+using System.Threading;
 using Utilities;
 using Common;
 
@@ -13,9 +14,9 @@ namespace Services
 {
     public class AddressService : IAddressService, IDisposable
     {
+        private readonly SemaphoreSlim _syncLock = new SemaphoreSlim(20);
         private readonly AddressDataManager _manager = new AddressDataManager();
-        private static readonly Object SynchLocker = new Object();
-
+        
         public List<CustomerModel.Address> GetAllAddresses()
         {
             var addresses = _manager.GetAllAddresses();
@@ -96,11 +97,8 @@ namespace Services
                     
                     using (var manager = new AddressDataManager()) // need to reopen the database context because of the async nature of the call
                     {
-                        lock (SynchLocker)
-                        {
-                            string stats;
-                            manager.SaveAddress(new List<CustomerModel.Address> {address}, out stats);
-                        }
+                        string stats;
+                        manager.SaveAddress(new List<CustomerModel.Address> {address}, out stats);
                     }
                     Console.WriteLine("{0} result(s) found for Address {1}", response.ResourceSets[0].Resources.Length, locationFromResponse.Name);
                     Console.WriteLine("\t\t [{0}] [{1}]", locationFromResponse.Point.Coordinates[0], locationFromResponse.Point.Coordinates[1]);
@@ -117,8 +115,10 @@ namespace Services
                 {
                     DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Response));
                     callback(ser.ReadObject(a.Result) as Response, address);
+                    _syncLock.Release();
                 }
             };
+            _syncLock.Wait();
             wc.OpenReadAsync(uri);
         }
 
