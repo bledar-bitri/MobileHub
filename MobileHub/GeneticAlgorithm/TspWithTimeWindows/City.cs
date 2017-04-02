@@ -10,7 +10,7 @@ namespace TspWithTimeWindows
 
         public int Id { get; set; }
 
-        public AddressLocation Location { get; }
+        public AddressLocation Location { get; set; }
 
         public string Name { get; }
 
@@ -21,6 +21,8 @@ namespace TspWithTimeWindows
         private readonly Dictionary<City, Road> _mRoads;
 
         public IEnumerable<City> NeighbourCities => _mRoads.Keys;
+
+        public string DebuggerDisplay => Location.DebuggerDisplay;
 
         public City(AddressLocation location, string name)
         {

@@ -9,6 +9,7 @@ using System.Runtime.Serialization.Json;
 using System.Threading;
 using Utilities;
 using Common;
+using CustomerModel;
 
 namespace Services
 {
@@ -27,7 +28,10 @@ namespace Services
         {
             return _manager.GetAddress(id);
         }
-
+        public List<CustomerModel.Address> GetUserAddresses(int userId)
+        {
+            return _manager.GetUserAddresses(userId);
+        }
         public void SaveAddresses(List<CustomerModel.Address> addresses)
         {
             string stats;
@@ -154,6 +158,8 @@ namespace Services
                 return null;
             }
         }
+
+       
         #endregion
     }
 }

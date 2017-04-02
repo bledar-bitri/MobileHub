@@ -111,6 +111,10 @@
       <Project>{ef399d86-10d3-4b8a-ab6b-232a701d0f07}</Project>
       <Name>2 CustomerModel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RoutePlanner\2 RoutePlanner.csproj">
+      <Project>{D696B390-6C28-4253-BAFF-CC9ED29BA314}</Project>
+      <Name>2 RoutePlanner</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Services\1 Services.csproj">
       <Project>{69aac7af-af35-46c6-b347-8fac4f41d6f5}</Project>
       <Name>1 Services</Name>

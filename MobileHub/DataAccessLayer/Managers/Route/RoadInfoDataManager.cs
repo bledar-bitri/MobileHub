@@ -67,7 +67,7 @@ namespace DataAccessLayer.Managers.Route
             statistics = "NO STATS DEFINED";
             foreach (var o in roadInfoList)
             {
-                ctx.AddRoadInfo((int)o.FromLatitude, (int)o.FromLongitude, (int)o.ToLatitude, (int)o.ToLongitude, (int)o.Distance, (int)o.TimeInSeconds);
+                ctx.AddRoadInfo(o.FromAddress, (int)o.FromLatitude, (int)o.FromLongitude, o.ToAddress, (int)o.ToLatitude, (int)o.ToLongitude, (int)o.Distance, (int)o.TimeInSeconds);
             }
         }
     }

@@ -88,10 +88,15 @@
     <Compile Include="BingMapsRESTServiceDataContracts.cs" />
     <Compile Include="CustomerContract.cs" />
     <Compile Include="GeocodeLocation.cs" />
+    <Compile Include="RoadInfoContract.cs" />
     <Compile Include="UserContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\3 RouteModel\3 RouteModel.csproj">
+      <Project>{E3F6180E-EDB7-4BC2-9B7D-7C1224379EB9}</Project>
+      <Name>3 RouteModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CustomerModel\2 CustomerModel.csproj">
       <Project>{ef399d86-10d3-4b8a-ab6b-232a701d0f07}</Project>
       <Name>2 CustomerModel</Name>

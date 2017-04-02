@@ -9,6 +9,7 @@ namespace Services
 
         List<Address> GetAllAddresses();
         Address GetAddress(string id);
+        List<Address> GetUserAddresses(int userId);
 
         void SaveAddresses(List<Address> addresses);
         void SaveAddress(Address address);

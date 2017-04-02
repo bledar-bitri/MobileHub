@@ -29,8 +29,12 @@ namespace RouteModel
     
         public virtual DbSet<RoadInfo> RoadInfos { get; set; }
     
-        public virtual int AddRoadInfo(Nullable<int> fromLat, Nullable<int> fromLon, Nullable<int> toLat, Nullable<int> toLon, Nullable<int> distance, Nullable<int> timeInSeconds)
+        public virtual int AddRoadInfo(string fromAddr, Nullable<int> fromLat, Nullable<int> fromLon, string toAddr, Nullable<int> toLat, Nullable<int> toLon, Nullable<int> distance, Nullable<int> timeInSeconds)
         {
+            var fromAddrParameter = fromAddr != null ?
+                new ObjectParameter("fromAddr", fromAddr) :
+                new ObjectParameter("fromAddr", typeof(string));
+    
             var fromLatParameter = fromLat.HasValue ?
                 new ObjectParameter("fromLat", fromLat) :
                 new ObjectParameter("fromLat", typeof(int));
@@ -38,6 +42,10 @@ namespace RouteModel
             var fromLonParameter = fromLon.HasValue ?
                 new ObjectParameter("fromLon", fromLon) :
                 new ObjectParameter("fromLon", typeof(int));
+    
+            var toAddrParameter = toAddr != null ?
+                new ObjectParameter("toAddr", toAddr) :
+                new ObjectParameter("toAddr", typeof(string));
     
             var toLatParameter = toLat.HasValue ?
                 new ObjectParameter("toLat", toLat) :
@@ -55,7 +63,7 @@ namespace RouteModel
                 new ObjectParameter("timeInSeconds", timeInSeconds) :
                 new ObjectParameter("timeInSeconds", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddRoadInfo", fromLatParameter, fromLonParameter, toLatParameter, toLonParameter, distanceParameter, timeInSecondsParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddRoadInfo", fromAddrParameter, fromLatParameter, fromLonParameter, toAddrParameter, toLatParameter, toLonParameter, distanceParameter, timeInSecondsParameter);
         }
     }
 }

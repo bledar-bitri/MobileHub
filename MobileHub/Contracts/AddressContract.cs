@@ -1,41 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper.QueryableExtensions.Impl;
-using CustomerModel;
-
-namespace Contracts
+﻿namespace Contracts
 {
     public class AddressContract
     {
-        public AddressContract()
-        {
-            
-        }
+        
+        public int Id { get; set; }
 
-        public AddressContract(CustomerModel.Address address)
-        {
-            Assign(address);
-        }
-
-        private void Assign(CustomerModel.Address address)
-        {
-            if(address == null) return;
-
-            Id = address.Id;
-            Street = address.Street;
-            Street2 = address.Street2;
-            City = address.City;
-            Sate = address.Sate;
-            Zip = address.Zip;
-            CountryId = address.CountryId;
-            Latitude = address.Latitude;
-            Longitude = address.Longitude;
-        }
-
-        public string Id { get; set; }
+        public string AddressId { get; set; }
 
         public string Street { get; set; }
 
@@ -52,5 +22,40 @@ namespace Contracts
         public long? Latitude { get; set; }
 
         public long? Longitude { get; set; }
+
+        public string Country { get; set; }
+
+        private string _address;
+
+        public string Address => _address;
+
+        public AddressContract(int id)
+        {
+            Id = id;
+        }
+
+        public AddressContract(int id, CustomerModel.Address address)
+        {
+            Id = id;
+            Assign(address);
+        }
+
+        private void Assign(CustomerModel.Address address)
+        {
+            if(address == null) return;
+
+            AddressId = address.Id;
+            Street = address.Street;
+            Street2 = address.Street2;
+            City = address.City;
+            Sate = address.Sate;
+            Zip = address.Zip;
+            CountryId = address.CountryId;
+            Latitude = address.Latitude;
+            Longitude = address.Longitude;
+            Country = address.Country?.Name;
+            _address = $"{Street},{Zip},{City},{Country}";
+        }
+
     }
 }

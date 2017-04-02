@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MobileHubRouteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MobileHubRouteModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="RoadInfo">
           <Key>
             <PropertyRef Name="FromLatitude" />
@@ -19,10 +19,14 @@
           <Property Name="Distance" Type="float" Nullable="false" />
           <Property Name="TimeInSeconds" Type="bigint" Nullable="false" />
           <Property Name="LookupDate" Type="datetime" />
+          <Property Name="FromAddress" Type="varchar" MaxLength="256" />
+          <Property Name="ToAddress" Type="varchar" MaxLength="256" />
         </EntityType>
         <Function Name="AddRoadInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="fromAddr" Type="varchar" Mode="In" />
           <Parameter Name="fromLat" Type="int" Mode="In" />
           <Parameter Name="fromLon" Type="int" Mode="In" />
+          <Parameter Name="toAddr" Type="varchar" Mode="In" />
           <Parameter Name="toLat" Type="int" Mode="In" />
           <Parameter Name="toLon" Type="int" Mode="In" />
           <Parameter Name="distance" Type="int" Mode="In" />
@@ -31,8 +35,7 @@
         <EntityContainer Name="MobileHubRouteModelStoreContainer">
           <EntitySet Name="RoadInfo" EntityType="Self.RoadInfo" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MobileHubRouteModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -50,12 +53,16 @@
           <Property Name="Distance" Type="Double" Nullable="false" />
           <Property Name="TimeInSeconds" Type="Int64" Nullable="false" />
           <Property Name="LookupDate" Type="DateTime" Precision="3" />
+          <Property Name="FromAddress" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="ToAddress" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityContainer Name="MobileHubRouteContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="RoadInfoes" EntityType="Self.RoadInfo" />
           <FunctionImport Name="AddRoadInfo">
+            <Parameter Name="fromAddr" Mode="In" Type="String" />
             <Parameter Name="fromLat" Mode="In" Type="Int32" />
             <Parameter Name="fromLon" Mode="In" Type="Int32" />
+            <Parameter Name="toAddr" Mode="In" Type="String" />
             <Parameter Name="toLat" Mode="In" Type="Int32" />
             <Parameter Name="toLon" Mode="In" Type="Int32" />
             <Parameter Name="distance" Mode="In" Type="Int32" />
@@ -71,6 +78,8 @@
           <EntitySetMapping Name="RoadInfoes">
             <EntityTypeMapping TypeName="MobileHubRouteModel.RoadInfo">
               <MappingFragment StoreEntitySet="RoadInfo">
+                <ScalarProperty Name="ToAddress" ColumnName="ToAddress" />
+                <ScalarProperty Name="FromAddress" ColumnName="FromAddress" />
                 <ScalarProperty Name="FromLatitude" ColumnName="FromLatitude" />
                 <ScalarProperty Name="FromLongitude" ColumnName="FromLongitude" />
                 <ScalarProperty Name="ToLatitude" ColumnName="ToLatitude" />

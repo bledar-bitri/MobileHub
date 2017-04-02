@@ -40,9 +40,9 @@ namespace Services
 
         #region Road Distance
 
-        public List<RoadInfo> LoadDistances(List<AddressContract> addresses)
+        public List<RoadInfoContract> LoadDistances(List<AddressContract> addresses)
         {
-            var list = new List<RoadInfo>();
+            var list = new List<RoadInfoContract>();
             foreach (var address in addresses)
             {
                 webLookupCount = 0;
@@ -53,11 +53,12 @@ namespace Services
 
         }
 
-        public async void LoadDistances(AddressContract currentAddress, List<AddressContract> addresses, List<RoadInfo> listToLoad)
+        public async void LoadDistances(AddressContract currentAddress, List<AddressContract> addresses, List<RoadInfoContract> listToLoad)
         {
             if (currentAddress?.Latitude == null || !currentAddress.Longitude.HasValue) return;
-
-            var tasks = new List<Task<RoadInfo>>();
+            var currentAddressText =
+                $"{currentAddress?.Street}, {currentAddress?.Zip}, {currentAddress?.City}, {currentAddress?.Country}";
+            var tasks = new List<Task<RoadInfoContract>>();
 
             foreach (var address in addresses)
             {
@@ -65,10 +66,15 @@ namespace Services
 
                 if (address.Latitude.HasValue && address.Longitude.HasValue)
                     tasks.Add(
-                        GetDistance(GeoCodeConverter.ToGeoCoordinate(currentAddress.Latitude.Value),
-                        GeoCodeConverter.ToGeoCoordinate(currentAddress.Longitude.Value),
-                        GeoCodeConverter.ToGeoCoordinate(address.Latitude.Value),
-                        GeoCodeConverter.ToGeoCoordinate(address.Longitude.Value)
+                        GetDistance(
+                            currentAddress.Id,
+                            currentAddressText,
+                            GeoCodeConverter.ToGeoCoordinate(currentAddress.Latitude.Value),
+                            GeoCodeConverter.ToGeoCoordinate(currentAddress.Longitude.Value),
+                            address.Id,
+                            $"{address.Street}, {address.Zip}, {address.City}, {address.Country}",
+                            GeoCodeConverter.ToGeoCoordinate(address.Latitude.Value),
+                            GeoCodeConverter.ToGeoCoordinate(address.Longitude.Value)
                         ));
             }
             Trace.TraceInformation("\n\n\n\n WAITING FOR ALL TASKS TO FINISH \n\n\n\n");
@@ -76,11 +82,11 @@ namespace Services
             Trace.TraceInformation("\n\n\n\n ALL TASKS DONE \n\n\n\n");
             listToLoad.AddRange(tasks.Select(task => task.Result));
         }
-        public async Task<RoadInfo> GetDistance(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude)
+        public async Task<RoadInfoContract> GetDistance(int fromAddressId, string fromAddress, double fromLatitude, double fromLongitude, int toAddressId, string toAddress, double toLatitude, double toLongitude)
         {
             try
             {
-                return await GetDistance(fromLatitude, fromLongitude, toLatitude, toLongitude, 3);
+                return await GetDistance(fromAddressId, fromAddress, fromLatitude, fromLongitude, toAddressId, toAddress, toLatitude, toLongitude, 3);
             }
             catch (Exception ex)
             {
@@ -89,7 +95,7 @@ namespace Services
             return null;
         }
 
-        private async Task<RoadInfo> GetDistance(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude, int tries)
+        private async Task<RoadInfoContract> GetDistance(int fromAddressId, string fromAddress, double fromLatitude, double fromLongitude, int toAddressId, string toAddress, double toLatitude, double toLongitude, int tries)
         {
 
             var roadDistance = _roadInfoManager.GetRoadInfo(
@@ -98,40 +104,42 @@ namespace Services
                 GeoCodeConverter.ToInteger(toLatitude),
                 GeoCodeConverter.ToInteger(toLongitude),
                 true);
-
+            
             if (roadDistance == null)
             {
-                return await GetGeocodeDistance(fromLatitude, fromLongitude, toLatitude, toLongitude, tries);
+                return await GetGeocodeDistance(fromAddressId, fromAddress, fromLatitude, fromLongitude, toAddressId, toAddress, toLatitude, toLongitude, tries);
             }
             // Lookup distance online if older than 6 months (maybe roads changed...)
             if (roadDistance.LookupDate == null || DateTime.Now.Subtract(roadDistance.LookupDate.Value).TotalDays > 180)
             {
-                return await GetGeocodeDistance(fromLatitude, fromLongitude, toLatitude, toLongitude, tries, true);
+                return await GetGeocodeDistance(fromAddressId, fromAddress, fromLatitude, fromLongitude, toAddressId, toAddress, toLatitude, toLongitude, tries, true);
             }
 
-            return roadDistance;            
+            return new RoadInfoContract(fromAddressId, toAddressId, roadDistance); 
         }
 
         private async Task<RoadInfo> ConvertToRoadInfoTask(RoadInfo ri)
         {
             return ri;
         }
-        private async Task<RoadInfo> GetGeocodeDistance(double fromLatitude, double fromLongitude, double toLatitude, double toLongitude, int tries, bool updateDistance = false)
+        private async Task<RoadInfoContract> GetGeocodeDistance(int fromAddressId, string fromAddress, double fromLatitude, double fromLongitude, int toAddressId, string toAddress, double toLatitude, double toLongitude, int tries, bool updateDistance = false)
         {
             var query = $"wp.0={fromLatitude},{fromLongitude}&wp.1={toLatitude},{toLongitude}";
             var geocodeRequest = new Uri($"http://dev.virtualearth.net/REST/v1/Routes/Driving?{query}&key={CommonConfigValues.BingMapsKey}");
             var road = new RoadInfo
             {
+                FromAddress = fromAddress,
                 FromLatitude = GeoCodeConverter.ToInteger(fromLatitude),
                 FromLongitude = GeoCodeConverter.ToInteger(fromLongitude),
+                ToAddress = toAddress,
                 ToLatitude = GeoCodeConverter.ToInteger(toLatitude),
                 ToLongitude = GeoCodeConverter.ToInteger(toLongitude),
                 LookupDate = DateTime.UtcNow
             };
-
+            
 //            GetResponse(geocodeRequest, road, asyncId++, SetGeocodeDistanceFromResponse);
             await GetResponseAsync(geocodeRequest, road, asyncId++);
-            return road;
+            return new RoadInfoContract(fromAddressId, toAddressId, road);
         }
 
 

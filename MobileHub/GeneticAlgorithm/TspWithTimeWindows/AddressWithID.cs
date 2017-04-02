@@ -17,6 +17,7 @@ namespace TspWithTimeWindows
 
         public AddressWithID()
         {
+            OtherIds = new List<int>();
         }
 
         public AddressWithID(int id, string address)
@@ -25,17 +26,14 @@ namespace TspWithTimeWindows
             Address = address;
             OtherIds = new List<int>();
             SuggestedAddresses = new List<AddressLocation>();
+            OtherIds = new List<int>();
         }
 
         public bool Equals(AddressWithID address)
         {
-            //            return ID == address.ID && Address == address.Address;
             return Address == address.Address;
         }
-
-        public string DebuggerDisplay
-        {
-            get { return string.Format("[ADDR: {0}] [ID: {1}]", Address, ID); }
-        }
+        
+        public string DebuggerDisplay => $"[ADDR: {Address}] [ID: {ID}]";
     }
 }

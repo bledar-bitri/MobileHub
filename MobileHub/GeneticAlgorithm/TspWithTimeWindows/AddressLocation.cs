@@ -20,11 +20,12 @@ namespace TspWithTimeWindows
         }
         public bool Equals(AddressLocation address)
         {
-            return address.Address == Address;
+            return address.Address.Equals(Address);
         }
         public string DebuggerDisplay
         {
-            get { return string.Format("{0} Locations [{1}]", Address.DebuggerDisplay, String.Join("; ", Locations.Select(l => l.Latitude + ", " + l.Longitude))); }
+            get { return
+                $"{Address.DebuggerDisplay} Locations [{string.Join("; ", Locations.Select(l => l.Latitude + ", " + l.Longitude))}]"; }
         }
 
         public string GetDumpData()

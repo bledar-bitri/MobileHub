@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,11 +52,17 @@
   <ItemGroup>
     <Compile Include="AddressLocation.cs" />
     <Compile Include="AddressWithID.cs" />
+    <Compile Include="AntColony\Ant.cs" />
     <Compile Include="City.cs" />
+    <Compile Include="IRouteEventHandler.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Road.cs" />
     <Compile Include="TSPChromosome.cs" />
     <Compile Include="TSPFitnessFunction.cs" />
+    <Compile Include="UpdateEventArgs.cs" />
+    <Compile Include="World.cs" />
+    <Compile Include="WorldBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -21,5 +21,7 @@ namespace RouteModel
         public double Distance { get; set; }
         public long TimeInSeconds { get; set; }
         public Nullable<System.DateTime> LookupDate { get; set; }
+        public string FromAddress { get; set; }
+        public string ToAddress { get; set; }
     }
 }

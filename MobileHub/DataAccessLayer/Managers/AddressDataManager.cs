@@ -32,10 +32,21 @@ namespace DataAccessLayer.Managers
             if (preloading) ctx.Customers.ToList();
         }
 
-        public Address GetAddress(string customerId, bool? tracking = null)
+        public Address GetAddress(string addressId, bool? tracking = null)
         {
-            var query = from c in Query<Address>(tracking) where c.Id == customerId select c;
+            var query = from c in Query<Address>(tracking) where c.Id == addressId select c;
             return query.SingleOrDefault();
+        }
+
+        public List<Address> GetUserAddresses(int userId, bool? tracking = null)
+        {
+            var query = (from c
+                        in ctx.Customers
+                        join a in ctx.Addresses on c.AddressId equals a.Id
+                       // join country in ctx.Countries on a.CountryId equals country.Id
+                        where c.AccountManagersUserId == userId
+                        select a).Include("Country");
+            return query.ToList();
         }
 
         public List<Address> GetAllAddresses()
