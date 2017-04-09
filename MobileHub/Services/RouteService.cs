@@ -117,11 +117,7 @@ namespace Services
 
             return new RoadInfoContract(fromAddressId, toAddressId, roadDistance); 
         }
-
-        private async Task<RoadInfo> ConvertToRoadInfoTask(RoadInfo ri)
-        {
-            return ri;
-        }
+        
         private async Task<RoadInfoContract> GetGeocodeDistance(int fromAddressId, string fromAddress, double fromLatitude, double fromLongitude, int toAddressId, string toAddress, double toLatitude, double toLongitude, int tries, bool updateDistance = false)
         {
             var query = $"wp.0={fromLatitude},{fromLongitude}&wp.1={toLatitude},{toLongitude}";
@@ -168,25 +164,6 @@ namespace Services
             }
         }
         
-
-        private void GetResponse(Uri uri, RoadInfo road, int counter, Action<Response, RoadInfo, int> callback)
-        {
-            var wc = new WebClient();
-            wc.OpenReadCompleted += (o, a) =>
-            {
-                if (callback != null)
-                {
-                    Trace.TraceInformation($"From: [{road.FromLatitude} {road.FromLongitude}] --> [{road.ToLatitude} {road.ToLongitude}] Distance: {road.Distance}");
-                    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Response));
-                    callback(ser.ReadObject(a.Result) as Response, road, counter);
-                    _syncLock.Release();
-                }
-            };
-            Trace.TraceInformation($" STARTING: {counter} ");
-            _syncLock.Wait();
-            wc.OpenReadAsync(uri);
-        }
-
         private async Task<RoadInfo> GetResponseAsync(Uri uri, RoadInfo road, int counter)
         {
             var wc = new WebClient();

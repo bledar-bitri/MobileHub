@@ -64,14 +64,13 @@ namespace RouteInfoLoaderWorkerRole
             while (!cancellationToken.IsCancellationRequested)
             {
                 Trace.TraceInformation("Working");
-                await Task.Delay(1000);
+                await Task.Delay(1000, cancellationToken);
                 var msg = queue.GetMessage();
-                if (msg != null)
-                {
-                    var requestParams = JsonConvert.DeserializeObject<RouteRequestParameters>(msg.AsString);
-                    Trace.TraceInformation($"Params UserID: {requestParams.UserId}");
-                    queue.DeleteMessage(msg);
-                }
+                if (msg == null) continue;
+
+                var requestParams = JsonConvert.DeserializeObject<RouteRequestParameters>(msg.AsString);
+                Trace.TraceInformation($"Params UserID: {requestParams.UserId}");
+                queue.DeleteMessage(msg);
             }
         }
     }
