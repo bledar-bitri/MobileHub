@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text;
 using System.Threading;
-using System.Xml.Serialization;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Common;
 using Contracts;
-using Services;
 using TspWithTimeWindows;
 
 namespace RoutePlanner
@@ -118,11 +110,7 @@ namespace RoutePlanner
                 IsRouteCalculationDone = false;
                 if (Cities.Count <= 0)
                     return;
-                UpdateProgressStatus(10, "Loading Addresses");
-                //LoadGeocodeAddresses(true);
                 
-                UpdateProgressStatus(20, "Loading Distances");
-                //LoadDistances(null, true);
                 UpdateProgressStatus(60, "Removing Zero-Length Roads");
                 RemoveZeroLengthRoads();
                 UpdateProgressStatus(80, "Calculating Tour");

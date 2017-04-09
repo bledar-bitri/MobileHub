@@ -1,10 +1,14 @@
+using System;
 using System.Diagnostics;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Newtonsoft.Json;
+using Ninject;
 using Parameters;
+using Services;
 using Utilities;
 
 namespace RouteInfoLoaderWorkerRole
@@ -60,6 +64,9 @@ namespace RouteInfoLoaderWorkerRole
 
         private async Task RunAsync(CancellationToken cancellationToken)
         {
+            var kernel = new StandardKernel();
+            kernel.Load(Assembly.GetExecutingAssembly());
+
             // TODO: Replace the following with your own logic.
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -70,6 +77,14 @@ namespace RouteInfoLoaderWorkerRole
 
                 var requestParams = JsonConvert.DeserializeObject<RouteRequestParameters>(msg.AsString);
                 Trace.TraceInformation($"Params UserID: {requestParams.UserId}");
+
+                
+                using (var service = kernel.Get<IRouteService>())
+                {
+                    var bestTour = service.GetRouteForUserId(1);
+                    bestTour.ForEach(c => Trace.TraceInformation(c.DebuggerDisplay));
+                }
+                
                 queue.DeleteMessage(msg);
             }
         }

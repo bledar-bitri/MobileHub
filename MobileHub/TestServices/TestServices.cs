@@ -1,5 +1,7 @@
 ﻿
 using System;
+using System.Reflection;
+using Ninject;
 
 namespace TestServices
 {
@@ -7,7 +9,12 @@ namespace TestServices
     {
         static void Main(string[] args)
         {
-            new TestRouteService();
+            var kernel = new StandardKernel();
+            kernel.Load(Assembly.GetExecutingAssembly());
+
+            var test = new TestRouteService(kernel);
+            test.TestRouteGenerationForUserId(1);
+
             Console.ReadLine();
         }
     }

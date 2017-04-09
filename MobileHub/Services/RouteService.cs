@@ -10,11 +10,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Contracts;
+using RoutePlanner;
+using TspWithTimeWindows;
 using Utilities;
 
 namespace Services
 {
-    public class RouteService : IRouteService, IDisposable
+    public class RouteService : IRouteService
     {
         private readonly SemaphoreSlim _syncLock = new SemaphoreSlim(20);
 
@@ -33,10 +35,13 @@ namespace Services
             throw new NotImplementedException();
         }
 
-        public void Dispose()
+        private readonly IAddressService addressService;
+
+        public RouteService(IAddressService addressService)
         {
-            _roadInfoManager.Dispose();
+            this.addressService = addressService;
         }
+
 
         #region Road Distance
 
@@ -179,8 +184,45 @@ namespace Services
 
         #region Generate Route
 
+        public List<City> GetRouteForUserId(int userId)
+        {
+            var addressContracs = new List<AddressContract>();
+            var roadInfoContracs = new List<RoadInfoContract>();
+            
+            Console.WriteLine("Loading Addresses");
+
+
+            var addresses = addressService.GetUserAddresses(1);
+            addressService.LoadGeocodeInformation(addresses[0]);
+                
+            Console.WriteLine("Address Contracts");
+            int count = 0;
+            addresses.ForEach(a =>
+            {
+                if (a.Latitude.HasValue && a.Longitude.HasValue)
+                {
+                    addressContracs.Add(new AddressContract(count++, a));
+                }
+            });
+
+            roadInfoContracs = LoadDistances(addressContracs);
+
+            var rp = new RoutePlanerManager(addressContracs, roadInfoContracs, true);
+            rp.Run();
+            return rp.BestTour;
+        }
         #endregion
 
+        #region IDisposable
+
+
+        public void Dispose()
+        {
+            _roadInfoManager.Dispose();
+        }
+
+
+        #endregion
 
 
 

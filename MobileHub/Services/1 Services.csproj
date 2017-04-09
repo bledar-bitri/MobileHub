@@ -64,9 +64,6 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -131,6 +128,14 @@
       <Project>{dd4f9c19-9f1c-44a8-81f3-6ca157dca1c2}</Project>
       <Name>Genetic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GeneticAlgorithm\TspWithTimeWindows\TspWithTimeWindows.csproj">
+      <Project>{AF04F1DF-B675-4F9F-9144-3FEC2075FBB3}</Project>
+      <Name>TspWithTimeWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RoutePlanner\2 RoutePlanner.csproj">
+      <Project>{d696b390-6c28-4253-baff-cc9ed29ba314}</Project>
+      <Name>2 RoutePlanner</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SecurityModel\1 SecurityModel.csproj">
       <Project>{b1691257-f06d-4da5-ae6d-1c1ea398b95e}</Project>
       <Name>1 SecurityModel</Name>
@@ -143,6 +148,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

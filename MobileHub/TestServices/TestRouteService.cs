@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Contracts;
+using Ninject;
 using RouteModel;
 using RoutePlanner;
 using Services;
@@ -9,8 +10,14 @@ namespace TestServices
 {
     public class TestRouteService
     {
-        public TestRouteService()
+        private StandardKernel _standardKernel;
+
+        public TestRouteService(StandardKernel kernel)
         {
+            _standardKernel = kernel;
+        }
+        public void Test() { 
+
             Console.WriteLine("================ Testing The Route Service ================");
             var addressContracs = new List<AddressContract>();
             var roadInfoContracs = new List<RoadInfoContract>();
@@ -39,14 +46,24 @@ namespace TestServices
                 });
             }
 
-            using (var service = new RouteService())
+            using (var service = _standardKernel.Get<IRouteService>())
             {
                 Console.WriteLine("Loading Distances");
-                roadInfoContracs = service.LoadDistances(addressContracs);
+                var bestTour = service.GetRouteForUserId(1);
                 Console.WriteLine($"{roadInfoContracs.Count} Distances Loaded");
             }
 
             new RoutePlanerManager(addressContracs, roadInfoContracs, true).Run();
+            Console.WriteLine("================ DONE ================");
+        }
+
+
+        public void TestRouteGenerationForUserId(int userId)
+        {
+            using (var service = _standardKernel.Get<IRouteService>())
+            {
+                var bestTour = service.GetRouteForUserId(1);
+            }
             Console.WriteLine("================ DONE ================");
         }
     }

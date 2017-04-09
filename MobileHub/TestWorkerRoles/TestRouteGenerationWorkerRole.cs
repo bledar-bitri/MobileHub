@@ -21,8 +21,11 @@ namespace TestWorkerRoles
                 try
                 {
                     int paramUserId = Convert.ToInt32(userId);
-                    for(int i =0; i < paramUserId; i++)
-                    SendMessage(i);
+                    
+                    //for(int i =0; i < paramUserId; i++)
+                    //SendMessage(i);
+                    SendMessage(paramUserId);
+
                     Console.WriteLine("\n\tEnter another UserId: (-1 to exit)");
                     userId = Console.ReadLine();
                 }

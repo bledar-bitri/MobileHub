@@ -1,15 +1,24 @@
-﻿using RouteModel;
+﻿using System;
+using RouteModel;
 using System.Collections.Generic;
+using TspWithTimeWindows;
 
 namespace Services
 {
-    public interface IRouteService
+    public interface IRouteService : IDisposable
     {
-        #region Data Access
+    #region Data Access
 
-        RoadInfo GetRoadInfo(int fromLatitude, int fromLongitude, int toLatitude, int toLongitude);
-        List<RoadInfo> GetAllRoadInfos();
+    RoadInfo GetRoadInfo(int fromLatitude, int fromLongitude, int toLatitude, int toLongitude);
+    List<RoadInfo> GetAllRoadInfos();
 
-        #endregion
+    #endregion
+
+    #region Route Generation
+
+    List<City> GetRouteForUserId(int userId);
+
+    #endregion
+
     }
 }

@@ -64,6 +64,9 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -85,6 +88,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bindings.cs" />
     <Compile Include="TestRouteService.cs" />
     <Compile Include="TestPasswordService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +110,10 @@
     <ProjectReference Include="..\CustomerModel\2 CustomerModel.csproj">
       <Project>{ef399d86-10d3-4b8a-ab6b-232a701d0f07}</Project>
       <Name>2 CustomerModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeneticAlgorithm\TspWithTimeWindows\TspWithTimeWindows.csproj">
+      <Project>{AF04F1DF-B675-4F9F-9144-3FEC2075FBB3}</Project>
+      <Name>TspWithTimeWindows</Name>
     </ProjectReference>
     <ProjectReference Include="..\RoutePlanner\2 RoutePlanner.csproj">
       <Project>{D696B390-6C28-4253-BAFF-CC9ED29BA314}</Project>
