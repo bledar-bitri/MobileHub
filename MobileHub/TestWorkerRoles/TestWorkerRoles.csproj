@@ -74,6 +74,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{14557EA6-996F-4509-9854-D35744BC9B19}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contracts\Contracts.csproj">
+      <Project>{EF18EA2F-78F0-41D3-8232-8F355285038C}</Project>
+      <Name>Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Parameters\Parameters.csproj">
       <Project>{fa16c8cb-de9d-4f44-9428-f29c463d31f9}</Project>
       <Name>Parameters</Name>

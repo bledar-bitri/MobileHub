@@ -81,9 +81,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GeneticAlgorithm\TspWithTimeWindows\TspWithTimeWindows.csproj">
-      <Project>{AF04F1DF-B675-4F9F-9144-3FEC2075FBB3}</Project>
-      <Name>TspWithTimeWindows</Name>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{14557ea6-996f-4509-9854-d35744bc9b19}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Contracts\Contracts.csproj">
+      <Project>{EF18EA2F-78F0-41D3-8232-8F355285038C}</Project>
+      <Name>Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{8ddac173-9267-4545-bd39-12aca2370000}</Project>
+      <Name>Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\Parameters\Parameters.csproj">
       <Project>{FA16C8CB-DE9D-4F44-9428-F29C463D31F9}</Project>

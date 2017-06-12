@@ -132,6 +132,10 @@
       <Project>{AF04F1DF-B675-4F9F-9144-3FEC2075FBB3}</Project>
       <Name>TspWithTimeWindows</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{8ddac173-9267-4545-bd39-12aca2370000}</Project>
+      <Name>Logging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RoutePlanner\2 RoutePlanner.csproj">
       <Project>{d696b390-6c28-4253-baff-cc9ed29ba314}</Project>
       <Name>2 RoutePlanner</Name>

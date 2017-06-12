@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 DataAccess", "1 DataAccess", "{A33DF074-C304-4E17-B878-D516F7AEBD96}"
 EndProject
@@ -68,6 +68,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 Shared", "0 Shared", "{F23D33F6-072A-431C-8D9E-2224E524F1D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{14557EA6-996F-4509-9854-D35744BC9B19}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logging", "Logging\Logging.csproj", "{8DDAC173-9267-4545-BD39-12ACA2370000}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -355,6 +357,18 @@ Global
 		{14557EA6-996F-4509-9854-D35744BC9B19}.Release|x64.Build.0 = Release|Any CPU
 		{14557EA6-996F-4509-9854-D35744BC9B19}.Release|x86.ActiveCfg = Release|Any CPU
 		{14557EA6-996F-4509-9854-D35744BC9B19}.Release|x86.Build.0 = Release|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Debug|x64.Build.0 = Debug|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Debug|x86.Build.0 = Debug|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Release|x64.ActiveCfg = Release|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Release|x64.Build.0 = Release|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Release|x86.ActiveCfg = Release|Any CPU
+		{8DDAC173-9267-4545-BD39-12ACA2370000}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -384,5 +398,6 @@ Global
 		{DD4F9C19-9F1C-44A8-81F3-6CA157DCA1C2} = {D978358F-A689-4418-9C30-5BE5FBD710FD}
 		{AF04F1DF-B675-4F9F-9144-3FEC2075FBB3} = {D978358F-A689-4418-9C30-5BE5FBD710FD}
 		{14557EA6-996F-4509-9854-D35744BC9B19} = {F23D33F6-072A-431C-8D9E-2224E524F1D4}
+		{8DDAC173-9267-4545-BD39-12ACA2370000} = {F23D33F6-072A-431C-8D9E-2224E524F1D4}
 	EndGlobalSection
 EndGlobal

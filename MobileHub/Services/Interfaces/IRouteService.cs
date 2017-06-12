@@ -1,24 +1,26 @@
 ﻿using System;
 using RouteModel;
 using System.Collections.Generic;
-using TspWithTimeWindows;
+using Contracts;
+using Logging.Interfaces;
 
 namespace Services
 {
     public interface IRouteService : IDisposable
     {
-    #region Data Access
 
-    RoadInfo GetRoadInfo(int fromLatitude, int fromLongitude, int toLatitude, int toLongitude);
-    List<RoadInfo> GetAllRoadInfos();
+        #region Data Access
 
-    #endregion
+        RoadInfo GetRoadInfo(int fromLatitude, int fromLongitude, int toLatitude, int toLongitude);
+        List<RoadInfo> GetAllRoadInfos();
 
-    #region Route Generation
+        #endregion
 
-    List<City> GetRouteForUserId(int userId);
+        #region Route Generation
 
-    #endregion
+         List<CityContract> CalculateRouteForUserId(int userId, ILogger logger);
+     
+        #endregion
 
     }
 }

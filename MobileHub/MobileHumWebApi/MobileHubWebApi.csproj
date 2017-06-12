@@ -206,6 +206,8 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\RouteGenerationProgressController.cs" />
+    <Compile Include="Controllers\RouteQueueController.cs" />
     <Compile Include="Controllers\AddressController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
@@ -299,6 +301,10 @@
     <Content Include="Scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{14557ea6-996f-4509-9854-d35744bc9b19}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contracts\Contracts.csproj">
       <Project>{ef18ea2f-78f0-41d3-8232-8f355285038c}</Project>
       <Name>Contracts</Name>
@@ -306,6 +312,10 @@
     <ProjectReference Include="..\CustomerModel\2 CustomerModel.csproj">
       <Project>{ef399d86-10d3-4b8a-ab6b-232a701d0f07}</Project>
       <Name>2 CustomerModel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Logging\Logging.csproj">
+      <Project>{8ddac173-9267-4545-bd39-12aca2370000}</Project>
+      <Name>Logging</Name>
     </ProjectReference>
     <ProjectReference Include="..\SecurityModel\1 SecurityModel.csproj">
       <Project>{b1691257-f06d-4da5-ae6d-1c1ea398b95e}</Project>

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Contracts;
+using Logging.Interfaces;
 using TspWithTimeWindows;
 
 namespace RoutePlanner
@@ -17,8 +18,10 @@ namespace RoutePlanner
     {
         public static int TimeToSleepBetweenRefreshes = 1000;
         public static int MaximumRoadsPerThread = 5000;
-
         
+        private ILogger logger;
+
+
         public List<City> Cities { get; set; }
         public List<Road> Roads { get; set; }
         public List<AddressWithID> Addresses { get; set; }
@@ -47,9 +50,12 @@ namespace RoutePlanner
 
         #region Constructors
         
-        public RoutePlanerManager(List<AddressContract> addresses, List<RoadInfoContract> roads, bool isDebugMode)
+        public RoutePlanerManager(List<AddressContract> addresses, List<RoadInfoContract> roads, bool isDebugMode, ILogger logger, int userId)
         {
             IsDebugMode = isDebugMode;
+            this.logger = logger;
+            this.UserId = userId;
+
             Init();
             foreach (var address in addresses)
             {
@@ -396,7 +402,7 @@ namespace RoutePlanner
                 //TskStatus.Progress = pct;
                 //TskStatus.ProgressText = message;
             }
-            Trace.TraceInformation($"{pct} {message}");
+            logger.LogMessage(UserId, $"{pct} {message}", pct == 100);
         }
 
         public void UpdateProgresLongMessage(string longMessage)
@@ -406,7 +412,13 @@ namespace RoutePlanner
                 //TskStatus.ProgressTextLong = longMessage;
             }
         }
-        
+
+        public List<CityContract> BestTourContract()
+        {
+            var list = new List<CityContract>();
+            BestTour.ForEach(c => list.Add(new CityContract{ Name = c.Name}));
+            return list;
+        }
         #region ISerializable
         protected RoutePlanerManager(SerializationInfo info, StreamingContext context)
         {

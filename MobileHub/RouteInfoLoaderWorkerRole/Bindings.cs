@@ -1,4 +1,6 @@
-﻿using Ninject;
+﻿using Logging;
+using Logging.Interfaces;
+using Ninject;
 using Ninject.Modules;
 using Services;
 
@@ -10,6 +12,7 @@ namespace TestServices
         {
             Bind<IAddressService>().To<AddressService>();
             Bind<IRouteService>().To<RouteService>();
+            Bind<ILogger>().To<QueueLogger>();
         }
     }
 }

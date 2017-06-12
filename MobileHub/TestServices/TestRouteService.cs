@@ -49,7 +49,7 @@ namespace TestServices
             using (var service = _standardKernel.Get<IRouteService>())
             {
                 Console.WriteLine("Loading Distances");
-                var bestTour = service.GetRouteForUserId(1);
+                var bestTour = service.CalculateRouteForUserId(1);
                 Console.WriteLine($"{roadInfoContracs.Count} Distances Loaded");
             }
 
@@ -62,7 +62,7 @@ namespace TestServices
         {
             using (var service = _standardKernel.Get<IRouteService>())
             {
-                var bestTour = service.GetRouteForUserId(1);
+                var bestTour = service.CalculateRouteForUserId(1);
             }
             Console.WriteLine("================ DONE ================");
         }

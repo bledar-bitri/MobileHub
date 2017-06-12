@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="AddressContract.cs" />
     <Compile Include="BingMapsRESTServiceDataContracts.cs" />
+    <Compile Include="CityContract.cs" />
     <Compile Include="CustomerContract.cs" />
     <Compile Include="GeocodeLocation.cs" />
     <Compile Include="RoadInfoContract.cs" />

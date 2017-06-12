@@ -1,9 +1,10 @@
-using System;
 using System.Diagnostics;
 using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Common;
+using Logging.Interfaces;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Newtonsoft.Json;
 using Ninject;
@@ -17,8 +18,10 @@ namespace RouteInfoLoaderWorkerRole
     {
         private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private readonly ManualResetEvent runCompleteEvent = new ManualResetEvent(false);
-        public static string QueueName = "routegeneration";
-        private static MobileAppCloudQueue queue;
+
+        
+        private static MobileAppCloudQueue requestQueue;
+        private static MobileAppCloudQueue responseQueue;
 
         public override void Run()
         {
@@ -45,7 +48,8 @@ namespace RouteInfoLoaderWorkerRole
             bool result = base.OnStart();
 
             Trace.TraceInformation("RouteInfoLoaderWorkerRole has been started");
-            queue = new MobileAppCloudQueue(QueueName);
+            requestQueue = new MobileAppCloudQueue(CommonConfigValues.RequestQueueName);
+            responseQueue = new MobileAppCloudQueue(CommonConfigValues.ResponseQueueName);
 
             return result;
         }
@@ -70,9 +74,11 @@ namespace RouteInfoLoaderWorkerRole
             // TODO: Replace the following with your own logic.
             while (!cancellationToken.IsCancellationRequested)
             {
-                Trace.TraceInformation("Working");
+                //Trace.TraceInformation("Working");
                 await Task.Delay(1000, cancellationToken);
-                var msg = queue.GetMessage();
+
+                var msg = requestQueue.GetMessage();
+
                 if (msg == null) continue;
 
                 var requestParams = JsonConvert.DeserializeObject<RouteRequestParameters>(msg.AsString);
@@ -81,11 +87,12 @@ namespace RouteInfoLoaderWorkerRole
                 
                 using (var service = kernel.Get<IRouteService>())
                 {
-                    var bestTour = service.GetRouteForUserId(1);
-                    bestTour.ForEach(c => Trace.TraceInformation(c.DebuggerDisplay));
+                    var bestTour = service.CalculateRouteForUserId(requestParams.UserId, kernel.Get<ILogger>());
+                    responseQueue.AddMessage(JsonConvert.SerializeObject(bestTour));
+                    bestTour.ForEach(c => Trace.TraceInformation(c.Name));
                 }
                 
-                queue.DeleteMessage(msg);
+                requestQueue.DeleteMessage(msg);
             }
         }
     }

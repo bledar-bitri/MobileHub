@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common;
 using Contracts;
+using Logging.Interfaces;
 using RoutePlanner;
 using TspWithTimeWindows;
 using Utilities;
@@ -45,20 +46,20 @@ namespace Services
 
         #region Road Distance
 
-        public List<RoadInfoContract> LoadDistances(List<AddressContract> addresses)
+        public List<RoadInfoContract> LoadDistances(List<AddressContract> addresses, ILogger logger, int userId)
         {
             var list = new List<RoadInfoContract>();
             foreach (var address in addresses)
             {
                 webLookupCount = 0;
-                LoadDistances(address, addresses, list);
+                LoadDistances(address, addresses, list, logger, userId);
                 Trace.TraceInformation($"From: [{address.Latitude} {address.Longitude}] Weblookup: {webLookupCount}");
             }
             return list;
 
         }
 
-        public async void LoadDistances(AddressContract currentAddress, List<AddressContract> addresses, List<RoadInfoContract> listToLoad)
+        public async void LoadDistances(AddressContract currentAddress, List<AddressContract> addresses, List<RoadInfoContract> listToLoad, ILogger logger, int userId)
         {
             if (currentAddress?.Latitude == null || !currentAddress.Longitude.HasValue) return;
             var currentAddressText =
@@ -79,7 +80,9 @@ namespace Services
                             address.Id,
                             $"{address.Street}, {address.Zip}, {address.City}, {address.Country}",
                             GeoCodeConverter.ToGeoCoordinate(address.Latitude.Value),
-                            GeoCodeConverter.ToGeoCoordinate(address.Longitude.Value)
+                            GeoCodeConverter.ToGeoCoordinate(address.Longitude.Value), 
+                            logger, 
+                            userId
                         ));
             }
             Trace.TraceInformation("\n\n\n\n WAITING FOR ALL TASKS TO FINISH \n\n\n\n");
@@ -87,7 +90,7 @@ namespace Services
             Trace.TraceInformation("\n\n\n\n ALL TASKS DONE \n\n\n\n");
             listToLoad.AddRange(tasks.Select(task => task.Result));
         }
-        public async Task<RoadInfoContract> GetDistance(int fromAddressId, string fromAddress, double fromLatitude, double fromLongitude, int toAddressId, string toAddress, double toLatitude, double toLongitude)
+        public async Task<RoadInfoContract> GetDistance(int fromAddressId, string fromAddress, double fromLatitude, double fromLongitude, int toAddressId, string toAddress, double toLatitude, double toLongitude, ILogger logger, int userId)
         {
             try
             {
@@ -95,7 +98,7 @@ namespace Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("GRRR: " + ex.Message);
+                logger?.LogError(ex, userId, "GRRR: " + ex.Message);
             }
             return null;
         }
@@ -184,18 +187,18 @@ namespace Services
 
         #region Generate Route
 
-        public List<City> GetRouteForUserId(int userId)
+        public List<CityContract> CalculateRouteForUserId(int userId, ILogger logger)
         {
             var addressContracs = new List<AddressContract>();
             var roadInfoContracs = new List<RoadInfoContract>();
             
-            Console.WriteLine("Loading Addresses");
+            logger?.LogMessage(userId, "Loading Addresses");
 
 
             var addresses = addressService.GetUserAddresses(1);
             addressService.LoadGeocodeInformation(addresses[0]);
-                
-            Console.WriteLine("Address Contracts");
+
+            logger?.LogMessage(userId, "Address Contracts");
             int count = 0;
             addresses.ForEach(a =>
             {
@@ -205,11 +208,13 @@ namespace Services
                 }
             });
 
-            roadInfoContracs = LoadDistances(addressContracs);
+            roadInfoContracs = LoadDistances(addressContracs, logger, userId);
 
-            var rp = new RoutePlanerManager(addressContracs, roadInfoContracs, true);
+            var rp = new RoutePlanerManager(addressContracs, roadInfoContracs, true, logger, userId);
             rp.Run();
-            return rp.BestTour;
+            var result = new List<CityContract>();
+            rp.BestTour.ForEach(tourCity => result.Add(new CityContract{Id = tourCity.Id, Name = tourCity.Name}));
+            return result;
         }
         #endregion
 
