@@ -7,21 +7,21 @@ using Utilities;
 
 namespace Logging
 {
-    public class QueueLogger : ILogger
+    public class ProgressQueueLogger : ILogger
     {
         private readonly MobileAppCloudQueue _queue = new MobileAppCloudQueue(CommonConfigValues.ProgressLogQueueName);
         
         public void LogError(Exception e, int processId, string message)
         {
             Trace.TraceError(message);
-            _queue.AddMessage(JsonConvert.SerializeObject(CreateMessage(processId, message, false, true)));
+            _queue.AddMessage(JsonConvert.SerializeObject(CreateMessage(processId, message, 0, false, true)));
             
         }
 
-        public void LogMessage(int processId, string message, bool isDone = false)
+        public void LogMessage(int processId, string message, int progressProcent, bool isDone = false)
         {
             Trace.TraceInformation(message);
-            _queue.AddMessage(JsonConvert.SerializeObject(CreateMessage(processId, message, isDone)));
+            _queue.AddMessage(JsonConvert.SerializeObject(CreateMessage(processId, message, progressProcent, isDone)));
         }
 
         public void LogWarning(int processId, string message)
@@ -30,14 +30,15 @@ namespace Logging
             _queue.AddMessage(JsonConvert.SerializeObject(CreateMessage(processId, message)));
         }
 
-        public QueueMessage CreateMessage(int processId, string message, bool isDone = false, bool isError = false)
+        public ProgressQueueMessage CreateMessage(int processId, string message, int progressPercent = 0, bool isDone = false, bool isError = false)
         {
-            return new QueueMessage
+            return new ProgressQueueMessage
             {
                 ProcessId = processId,
                 Text = message,
                 IsError = isError,
-                IsDone = isDone
+                IsDone = isDone,
+                ProgressPercent = progressPercent
             };
         }
     }

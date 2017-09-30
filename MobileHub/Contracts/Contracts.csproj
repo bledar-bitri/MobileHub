@@ -87,6 +87,7 @@
     <Compile Include="CustomerContract.cs" />
     <Compile Include="GeocodeLocation.cs" />
     <Compile Include="RoadInfoContract.cs" />
+    <Compile Include="UserContractForUserSelection.cs" />
     <Compile Include="UserContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

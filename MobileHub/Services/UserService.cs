@@ -37,6 +37,12 @@ namespace Services
 
         }
 
+        public List<UserContractForUserSelection> GetUsersForUserSelection()
+        {
+            var users = _manager.GetUsers();
+            return users.Select(user => new UserContractForUserSelection(user)).ToList();
+        }
+
         public UserContract GetUser(int userId)
         {
             var user = _manager.GetUser(userId);

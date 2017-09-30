@@ -45,9 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\ILogger.cs" />
-    <Compile Include="QueueLogger.cs" />
+    <Compile Include="ProgressQueueMessage.cs" />
+    <Compile Include="ProgressQueueLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueueMessage.cs" />
+    <Compile Include="LogQueueMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

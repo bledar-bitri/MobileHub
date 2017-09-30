@@ -366,7 +366,7 @@ namespace RoutePlanner
             var dot = "";
             while (mapStateInfo.NumerOfThreadsNotYetCompleted > 0)
             {
-                if (isTask)
+                //if (isTask)
                 {
                     var msg = String.Format("Calculating Tour: [Best: {0}] [Time: {1} of {2}]" + dot, (int) _tspBestTourValue, CommonUtils.FormatTimeSpan(_tspRunTime), CommonUtils.FormatTimeSpan(new TimeSpan(0, 0, 0, 0, World.MaxOptimationTime)));
                     UpdateProgressStatus(80, msg);
@@ -397,12 +397,7 @@ namespace RoutePlanner
 
         public void UpdateProgressStatus(int pct, string message)
         {
-            if(TskStatus != null)
-            {
-                //TskStatus.Progress = pct;
-                //TskStatus.ProgressText = message;
-            }
-            logger.LogMessage(UserId, $"{pct} {message}", pct == 100);
+            logger.LogMessage(UserId, message, pct, pct == 100);
         }
 
         public void UpdateProgresLongMessage(string longMessage)

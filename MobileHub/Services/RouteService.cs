@@ -192,13 +192,13 @@ namespace Services
             var addressContracs = new List<AddressContract>();
             var roadInfoContracs = new List<RoadInfoContract>();
             
-            logger?.LogMessage(userId, "Loading Addresses");
+            logger?.LogMessage(userId, "Loading Addresses", 0);
 
 
             var addresses = addressService.GetUserAddresses(1);
             addressService.LoadGeocodeInformation(addresses[0]);
 
-            logger?.LogMessage(userId, "Address Contracts");
+            logger?.LogMessage(userId, "Address Contracts", 0);
             int count = 0;
             addresses.ForEach(a =>
             {

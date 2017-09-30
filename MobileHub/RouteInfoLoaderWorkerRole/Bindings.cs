@@ -12,7 +12,7 @@ namespace TestServices
         {
             Bind<IAddressService>().To<AddressService>();
             Bind<IRouteService>().To<RouteService>();
-            Bind<ILogger>().To<QueueLogger>();
+            Bind<ILogger>().To<ProgressQueueLogger>();
         }
     }
 }

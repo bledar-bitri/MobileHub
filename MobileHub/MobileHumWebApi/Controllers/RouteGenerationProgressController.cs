@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Common;
+using Logging;
 using Microsoft.WindowsAzure.Storage.Queue.Protocol;
 using Newtonsoft.Json;
 using Utilities;
@@ -11,7 +12,7 @@ namespace MobileHumWebApi.Controllers
     {
         
         // GET api/values/5
-        public Logging.QueueMessage Get()
+        public ProgressQueueMessage Get()
         {
             var queue = new MobileAppCloudQueue(CommonConfigValues.ProgressLogQueueName);
 
@@ -21,7 +22,7 @@ namespace MobileHumWebApi.Controllers
 
             queue.DeleteMessage(msg);
 
-            return JsonConvert.DeserializeObject<Logging.QueueMessage>(msg.AsString);
+            return JsonConvert.DeserializeObject<ProgressQueueMessage>(msg.AsString);
 
         }
 

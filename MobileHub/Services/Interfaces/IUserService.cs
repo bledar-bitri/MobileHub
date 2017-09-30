@@ -10,6 +10,7 @@ namespace Services
         List<UserContract> AddUser(UserContract user, out string statistics);
         List<UserContract> AddUsers(List<UserContract> users, out string statistics);
         List<UserContract> GetAllUsers();
+        List<UserContractForUserSelection> GetUsersForUserSelection();
         UserContract GetUser(int userId);
 
         #endregion

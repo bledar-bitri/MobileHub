@@ -11,7 +11,6 @@ namespace MobileHumWebApi.Controllers
 {
     public class UserContractController : ApiController
     {
-        // GET: api/User
         public IEnumerable<UserContract> Get()
         {
             using (var service = new UserService())
@@ -20,7 +19,15 @@ namespace MobileHumWebApi.Controllers
             }
         }
 
-        // GET: api/User/5
+        [Route("api/UserContract/{sectionType}/GetBySection")]
+        public IEnumerable<UserContractForUserSelection> Get(string sectionType)
+        {
+            using (var service = new UserService())
+            {
+                return service.GetUsersForUserSelection();
+            }
+        }
+        
         public UserContract Get(int id)
         {
             using (var service = new UserService())
@@ -29,7 +36,6 @@ namespace MobileHumWebApi.Controllers
             }
         }
 
-        // POST /api/user
         [HttpPost]
         public HttpResponseMessage PostUsers(List<UserContract> users)
         {
@@ -48,7 +54,6 @@ namespace MobileHumWebApi.Controllers
             }
         }
 
-        // DELETE: api/User/5
         public void Delete(int id)
         {
         }
