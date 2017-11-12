@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace TspWithTimeWindows
 {
@@ -40,7 +41,8 @@ namespace TspWithTimeWindows
 
         internal void AddRoad(Road road, City otherCity)
         {
-            _mRoads.Add(otherCity, road);
+            if (_mRoads.Keys.FirstOrDefault(city => city == otherCity) == null)
+                _mRoads.Add(otherCity, road);
         }
 
         public Road Roads(City to)

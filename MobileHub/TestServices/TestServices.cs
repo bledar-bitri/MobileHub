@@ -13,7 +13,7 @@ namespace TestServices
             kernel.Load(Assembly.GetExecutingAssembly());
 
             var test = new TestRouteService(kernel);
-            test.TestRouteGenerationForUserId(1);
+            test.TestRouteGenerationForUserId(Guid.NewGuid().ToString(), 1);
 
             Console.ReadLine();
         }

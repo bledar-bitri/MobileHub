@@ -49,7 +49,7 @@ namespace TestWorkerRoles
 
         public static void SendMessage(int userId)
         {
-            var param = new RouteRequestParameters { UserId = userId };
+            var param = new RouteRequestParameters {ClientId = Guid.NewGuid().ToString(), UserId = userId };
             Console.WriteLine("Sending Parameter into the queue: {0}", param);
             queue.AddMessage(JsonConvert.SerializeObject(param));
         }

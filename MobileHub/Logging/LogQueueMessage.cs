@@ -1,6 +1,6 @@
 ﻿namespace Logging
 {
-    public class LogQueueMessage
+    public class LogQueueMessage : QueueMessage
     {
         public int ProcessId { get; set; }
         

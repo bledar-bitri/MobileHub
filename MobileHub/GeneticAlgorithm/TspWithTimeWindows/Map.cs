@@ -70,17 +70,15 @@ namespace TspWithTimeWindows
                 wb.AddCity(c);
                 m_CityMap.Add(c, c);
             }
-            int cnt = 0;
             foreach (var road in m_Roads)
             {
                 try
                 {
                     wb.AddRoad(road.Distance, road.Duration, road.From, road.To);
-                    cnt++;
                 }
-                catch(Exception ex)
+                catch
                 {
-                    int i = 0;
+                    // ignored
                 }
             }
 
@@ -100,14 +98,16 @@ namespace TspWithTimeWindows
         public String GetProgressTour(IEnumerable<City> tour)
         {
             var sb = new StringBuilder();
-            var i = tour.GetEnumerator();
-            int counter = 1;
-            while (i.MoveNext())
+            if (tour != null)
             {
-                sb.Append(m_CityMap[i.Current].Location.Address.ID);
-                sb.Append(" > ");
-                //                if (counter++ % 10 == 0)
-                //                    sb.Append(" <br/> ");                
+                var i = tour.GetEnumerator();
+
+                while (i.MoveNext())
+                {
+                    sb.Append(m_CityMap[i.Current].Location.Address.ID);
+                    sb.Append(" > ");            
+                }
+                i.Dispose();
             }
             return sb.ToString();
         }

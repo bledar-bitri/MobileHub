@@ -18,7 +18,7 @@ namespace Services
 
         #region Route Generation
 
-         List<CityContract> CalculateRouteForUserId(int userId, ILogger logger);
+         List<CityContract> CalculateRouteForUserId(string clientId, int userId, ILogger logger);
      
         #endregion
 

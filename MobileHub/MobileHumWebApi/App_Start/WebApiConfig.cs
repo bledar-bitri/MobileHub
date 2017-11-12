@@ -28,16 +28,16 @@ namespace MobileHumWebApi
                 defaults: new { id = RouteParameter.Optional }
             );
             
-            // ---------- Einstellungen für JSON-Serialisierung
-            // DateTimeformat Setzen
+            // ---------- Settings for JSON-Serialisation
+            // set DateTime format 
             config.Formatters.JsonFormatter.SerializerSettings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
 
-            // Referenzen ignorieren
+            // references to ignore
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Serialize;
             
-            // notwendig, weil in JavaScript in camelCasing
+            // we need this because of JavaScript camelCasing
             config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 
             // install-package Microsoft.AspNet.Cors

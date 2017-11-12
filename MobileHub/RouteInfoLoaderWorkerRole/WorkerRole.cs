@@ -70,8 +70,7 @@ namespace RouteInfoLoaderWorkerRole
         {
             var kernel = new StandardKernel();
             kernel.Load(Assembly.GetExecutingAssembly());
-
-            // TODO: Replace the following with your own logic.
+            
             while (!cancellationToken.IsCancellationRequested)
             {
                 //Trace.TraceInformation("Working");
@@ -87,7 +86,7 @@ namespace RouteInfoLoaderWorkerRole
                 
                 using (var service = kernel.Get<IRouteService>())
                 {
-                    var bestTour = service.CalculateRouteForUserId(requestParams.UserId, kernel.Get<ILogger>());
+                    var bestTour = service.CalculateRouteForUserId(requestParams.ClientId, requestParams.UserId, kernel.Get<ILogger>());
                     responseQueue.AddMessage(JsonConvert.SerializeObject(bestTour));
                     bestTour.ForEach(c => Trace.TraceInformation(c.Name));
                 }

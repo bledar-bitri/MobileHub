@@ -62,6 +62,10 @@
       <Project>{8ddac173-9267-4545-bd39-12aca2370000}</Project>
       <Name>Logging</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Utilities\Utilities.csproj">
+      <Project>{ed199ca2-3d5f-4368-99d9-13ffecdd9087}</Project>
+      <Name>Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -32,7 +32,7 @@ namespace Utilities
             await cloudQueue.AddMessageAsync(msg);
         }
 
-        public async System.Threading.Tasks.Task<CloudQueueMessage> GetMessage()
+        public async Task<CloudQueueMessage> GetMessage()
         {
             return await cloudQueue.GetMessageAsync();
         }

@@ -11,6 +11,7 @@ using Common;
 using Contracts;
 using Logging.Interfaces;
 using TspWithTimeWindows;
+using Utilities;
 
 namespace RoutePlanner
 {
@@ -47,14 +48,16 @@ namespace RoutePlanner
         public TimeSpan _tspRunTime;
         public double _tspBestTourValue;
         public City currentLocation;
+        private string ClientId;
 
         #region Constructors
         
-        public RoutePlanerManager(List<AddressContract> addresses, List<RoadInfoContract> roads, bool isDebugMode, ILogger logger, int userId)
+        public RoutePlanerManager(string clientId, List<AddressContract> addresses, List<RoadInfoContract> roads, bool isDebugMode, ILogger logger, int userId)
         {
             IsDebugMode = isDebugMode;
             this.logger = logger;
             this.UserId = userId;
+            this.ClientId = clientId;
 
             Init();
             foreach (var address in addresses)
@@ -397,21 +400,23 @@ namespace RoutePlanner
 
         public void UpdateProgressStatus(int pct, string message)
         {
-            logger.LogMessage(UserId, message, pct, pct == 100);
+            logger.LogMessage(ClientId, UserId, message, pct, pct == 100);
         }
 
         public void UpdateProgresLongMessage(string longMessage)
         {
-            if (TskStatus != null)
-            {
-                //TskStatus.ProgressTextLong = longMessage;
-            }
+            //TskStatus.ProgressTextLong = longMessage;
         }
 
         public List<CityContract> BestTourContract()
         {
             var list = new List<CityContract>();
-            BestTour.ForEach(c => list.Add(new CityContract{ Name = c.Name}));
+            BestTour.ForEach(c => list.Add(new CityContract
+            {
+                Name = c.Name,
+                Latitude = GeoCodeConverter.ToInteger(c.Location.Locations[0].Latitude),
+                Longitude = GeoCodeConverter.ToInteger(c.Location.Locations[0].Longitude)
+            }));
             return list;
         }
         #region ISerializable

@@ -62,28 +62,9 @@ namespace Services
         private void LoadGeocodeCoordinatesFromWeb(CustomerModel.Address address)
         {
             var query = $"{address.Street}, {address.Zip}, {address.City}, {address.Country.Name}";
-            Uri geocodeRequest = new Uri($"http://dev.virtualearth.net/REST/v1/Locations?q={query}&key={CommonConfigValues.BingMapsKey}");
+            var geocodeRequest = new Uri($"http://dev.virtualearth.net/REST/v1/Locations?q={query}&key={CommonConfigValues.BingMapsKey}");
 
             GetResponse(geocodeRequest, address, GetGeocodeLocationFromResponse);
-            
-            /*
-            if (geocodeResponse.Results.Length == 1)
-            {
-                //SaveGegnerLocation(stateInfo.Address.ID, geocodeResponse.Results[0].Locations[0].Latitude, geocodeResponse.Results[0].Locations[0].Longitude);
-                return geocodeResponse.Results[0].Locations;
-            }
-            else if (geocodeResponse.Results.Length > 1)
-            {
-                var locationsList = new List<GeocodeLocation>();
-                foreach (var r in geocodeResponse.Results) {
-                    locationsList.AddRange(r.Locations);
-                }
-                return locationsList.ToArray();
-            }
-            else
-            {
-                return LoadGeocodeAddressFromGoogleMaps(address);
-            }*/
         }
 
         private void GetGeocodeLocationFromResponse(Response response, CustomerModel.Address address)
