@@ -5,7 +5,7 @@ using Services.Interfaces;
 
 namespace Services
 {
-    public class PasswordService : IPasswordService
+    public class PasswordService : BaseService, IPasswordService
     {
         /// <summary>
         /// Generates a hash for the given plain text value and returns a

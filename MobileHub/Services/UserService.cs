@@ -7,7 +7,7 @@ using SecurityModel;
 
 namespace Services
 {
-    public class UserService : IUserService, IDisposable
+    public class UserService : BaseService, IUserService, IDisposable
     {
         private readonly UserDataManager _manager = new UserDataManager();
 

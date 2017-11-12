@@ -13,7 +13,7 @@ using CustomerModel;
 
 namespace Services
 {
-    public class AddressService : IAddressService, IDisposable
+    public class AddressService : BaseService, IAddressService, IDisposable
     {
         private readonly SemaphoreSlim _syncLock = new SemaphoreSlim(20);
         private readonly AddressDataManager _manager = new AddressDataManager();

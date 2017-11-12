@@ -6,7 +6,7 @@ using DataAccessLayer.Managers;
 
 namespace Services
 {
-    public class CustomerService : ICustomerService, IDisposable
+    public class CustomerService : BaseService, ICustomerService, IDisposable
     {
         private readonly CustomerDataManager _manager = new CustomerDataManager();
 
@@ -26,7 +26,9 @@ namespace Services
         {
             var customers = _manager.GetAllCustomers();
             var contracts = new List<CustomerContract>();
-            customers.ForEach(c => contracts.Add(new CustomerContract(c)));
+            
+            customers.ForEach(c => contracts.Add(AutoMapper.Mapper.Map<Customer, CustomerContract>(c)));
+            
             return contracts;
         }
 

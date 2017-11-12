@@ -87,6 +87,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapperConfig.cs" />
     <Compile Include="RouteService.cs" />
     <Compile Include="AddressService.cs" />
     <Compile Include="Interfaces\IRouteService.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="PasswordService.cs" />
     <Compile Include="CustomerService.cs" />
+    <Compile Include="BaseService.cs" />
     <Compile Include="UserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

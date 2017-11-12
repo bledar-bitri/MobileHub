@@ -8,16 +8,18 @@ using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Common;
 using Contracts;
 using Logging.Interfaces;
 using RoutePlanner;
 using TspWithTimeWindows;
 using Utilities;
+using Address = CustomerModel.Address;
 
 namespace Services
 {
-    public class RouteService : IRouteService
+    public class RouteService : BaseService, IRouteService
     {
         private readonly SemaphoreSlim _syncLock = new SemaphoreSlim(20);
 
@@ -207,7 +209,10 @@ namespace Services
             {
                 if (a.Latitude.HasValue && a.Longitude.HasValue)
                 {
-                    addressContracs.Add(new AddressContract(count++, a));
+                    var addressContract = Mapper.Map<Address, AddressContract>(a);
+                    addressContract.Id = count++;
+                    addressContracs.Add(addressContract);
+                    
                 }
             });
 
