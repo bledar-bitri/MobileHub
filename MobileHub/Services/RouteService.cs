@@ -41,11 +41,11 @@ namespace Services
             throw new NotImplementedException();
         }
 
-        private readonly IAddressService addressService;
+        private readonly IAddressService _addressService;
 
         public RouteService(IAddressService addressService)
         {
-            this.addressService = addressService;
+            this._addressService = addressService;
         }
 
 
@@ -200,20 +200,17 @@ namespace Services
             logger?.LogMessage(ClientId, userId, "Loading Addresses", 0);
 
 
-            var addresses = addressService.GetUserAddresses(1);
-            addressService.LoadGeocodeInformation(addresses[0]);
+            var addresses = _addressService.GetUserAddresses(1);
+            _addressService.LoadGeocodeInformation(addresses[0]);
 
             logger?.LogMessage(ClientId, userId, "Address Contracts", 0);
-            int count = 0;
+            var count = 0;
             addresses.ForEach(a =>
             {
-                if (a.Latitude.HasValue && a.Longitude.HasValue)
-                {
-                    var addressContract = Mapper.Map<Address, AddressContract>(a);
-                    addressContract.Id = count++;
-                    addressContracs.Add(addressContract);
-                    
-                }
+                if (!a.Latitude.HasValue || !a.Longitude.HasValue) return;
+                var addressContract = Mapper.Map<Address, AddressContract>(a);
+                addressContract.Id = count++;
+                addressContracs.Add(addressContract);
             });
 
             var roadInfoContracs = LoadDistances(addressContracs, logger, userId);
