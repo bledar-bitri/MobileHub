@@ -4,7 +4,7 @@ using Contracts;
 using Logging;
 using Logging.Interfaces;
 using Ninject;
-using RouteModel;
+using AutoMapper;
 using RoutePlanner;
 using Services;
 
@@ -17,6 +17,7 @@ namespace TestServices
         public TestRouteService(StandardKernel kernel)
         {
             _standardKernel = kernel;
+            AutoMapperConfig.Configure();
         }
         public void Test() { 
 
@@ -40,12 +41,13 @@ namespace TestServices
                 });*/
                 Console.WriteLine("Address Contracts");
                 int count = 0;
+                
                 addresses.ForEach(a =>
                 {
-                    if (a.Latitude.HasValue && a.Longitude.HasValue)
-                    {
-                        addressContracs.Add(new AddressContract(count++, a));    
-                    }
+                    if (!a.Latitude.HasValue || !a.Longitude.HasValue) return;
+                    var addressContract = Mapper.Map<CustomerModel.Address, AddressContract>(a);
+                    addressContract.Id = count++;
+                    addressContracs.Add(addressContract);
                 });
             }
 

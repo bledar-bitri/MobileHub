@@ -19,7 +19,7 @@ namespace Services
                 cfg.CreateMap<CustomerModel.Address, AddressContract>()
                 .ForMember(to => to.AddressId, opt => opt.MapFrom(from => from.Id))
                 .ForMember(to => to.Id, opt => opt.Ignore());
-                
+
             });
 
             _isConfigured = true;
