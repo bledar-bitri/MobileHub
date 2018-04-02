@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Common;
+using Contracts;
 using Logging.Interfaces;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Newtonsoft.Json;
@@ -86,9 +87,17 @@ namespace RouteInfoLoaderWorkerRole
                 
                 using (var service = kernel.Get<IRouteService>())
                 {
-                    var bestTour = service.CalculateRouteForUserId(requestParams.ClientId, requestParams.UserId, kernel.Get<ILogger>());
-                    responseQueue.AddMessage(JsonConvert.SerializeObject(bestTour));
-                    bestTour.ForEach(c => Trace.TraceInformation(c.Name));
+                    var bestRoute = new BestRouteContract
+                    {
+                        RequestId = requestParams.RequestId,
+                        Route =
+                            service.CalculateRouteForUserId(requestParams.ClientId, requestParams.UserId,
+                                kernel.Get<ILogger>())
+                    };
+
+
+                    responseQueue.AddMessage(JsonConvert.SerializeObject(bestRoute));
+                    bestRoute.Route.ForEach(c => Trace.TraceInformation(c.Name));
                 }
                 
                 requestQueue.DeleteMessage(msg);

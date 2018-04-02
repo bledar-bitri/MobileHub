@@ -12,7 +12,7 @@ namespace MobileHumWebApi.Controllers
 {
     public class RouteQueueController : ApiController
     {
-        readonly MobileAppCloudQueue queue = new MobileAppCloudQueue(CommonConfigValues.ResponseQueueName);
+        readonly MobileAppCloudQueue _queue = new MobileAppCloudQueue(CommonConfigValues.ResponseQueueName);
 
         protected override void Initialize(HttpControllerContext controllerContext)
         {
@@ -21,15 +21,15 @@ namespace MobileHumWebApi.Controllers
         }
 
         // GET: table/User
-        public IEnumerable<CityContract> Get()
+        public BestRouteContract Get()
         {
-            var msg = queue.GetMessage();
+            var msg = _queue.GetMessage();
 
             if (msg == null) return null;
 
-           // queue.DeleteMessage(msg);
+           // _queue.DeleteMessage(msg);
 
-            return JsonConvert.DeserializeObject<List<CityContract>>(msg.AsString);
+            return JsonConvert.DeserializeObject<BestRouteContract>(msg.AsString);
             
             
 
