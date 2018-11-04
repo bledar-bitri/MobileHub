@@ -9,11 +9,18 @@ using Monitoring;
 
 namespace MobileHumWebApi.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SignalRController : ApiController
     {
         private CancellationToken _token = new CancellationToken();
 
         // GET api/values
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<string> Get()
         {
 
@@ -39,7 +46,7 @@ namespace MobileHumWebApi.Controllers
             
         }
 
-        public async Task ProcessMessagesAsync()
+        private async Task ProcessMessagesAsync()
         {
             var monitor = new ProgressQueueMonitor();
             var hub = new RouteHub();

@@ -166,10 +166,9 @@ namespace Services
                     {
                         
                         webLookupCount++;
-                        string stats;
                         road.Distance = res.TravelDistance;
                         road.TimeInSeconds = (long) res.TravelDuration;
-                        manager.SaveRoadInfo(road, out stats);
+                        manager.SaveRoadInfo(road, out string stats);
                         
                     }
                     //Trace.TraceInformation($"From: [{road.FromLatitude} {road.FromLongitude}] --> [{road.ToLatitude} {road.ToLongitude}] Distance: {road.Distance}");

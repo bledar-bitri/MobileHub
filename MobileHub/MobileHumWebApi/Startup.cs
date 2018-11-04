@@ -8,8 +8,15 @@ using Owin;
 
 namespace MobileHumWebApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="app"></param>
         public void Configuration(IAppBuilder app)
         {
             app.Map("/signalr", map =>

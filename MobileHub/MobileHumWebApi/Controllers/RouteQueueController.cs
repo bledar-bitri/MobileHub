@@ -10,10 +10,14 @@ using Utilities;
 
 namespace MobileHumWebApi.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class RouteQueueController : ApiController
     {
         readonly MobileAppCloudQueue _queue = new MobileAppCloudQueue(CommonConfigValues.ResponseQueueName);
 
+        /// <inheritdoc />
         protected override void Initialize(HttpControllerContext controllerContext)
         {
             base.Initialize(controllerContext);
@@ -21,6 +25,10 @@ namespace MobileHumWebApi.Controllers
         }
 
         // GET: table/User
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public BestRouteContract Get()
         {
             var msg = _queue.GetMessage();

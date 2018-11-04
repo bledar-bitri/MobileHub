@@ -5,8 +5,14 @@ using System.Web.Routing;
 
 namespace MobileHumWebApi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class WebApiApplication : HttpApplication
     {
+        /// <summary>
+        /// 
+        /// </summary>
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);

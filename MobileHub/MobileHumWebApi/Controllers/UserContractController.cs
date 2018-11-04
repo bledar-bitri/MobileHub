@@ -9,8 +9,15 @@ using Services;
 
 namespace MobileHumWebApi.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class UserContractController : ApiController
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<UserContract> Get()
         {
             using (var service = new UserService())
@@ -19,6 +26,11 @@ namespace MobileHumWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sectionType"></param>
+        /// <returns></returns>
         [Route("api/UserContract/{sectionType}/GetBySection")]
         public IEnumerable<UserContractForUserSelection> Get(string sectionType)
         {
@@ -28,6 +40,11 @@ namespace MobileHumWebApi.Controllers
             }
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public UserContract Get(int id)
         {
             using (var service = new UserService())
@@ -36,13 +53,17 @@ namespace MobileHumWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
         [HttpPost]
         public HttpResponseMessage PostUsers(List<UserContract> users)
         {
             using (var service = new UserService())
             {
-                string statistics;
-                var newUsers = service.AddUsers(users, out statistics);
+                var newUsers = service.AddUsers(users, out string statistics);
 
                 var lang = Request.Headers.AcceptLanguage.FirstOrDefault();
 
@@ -54,6 +75,10 @@ namespace MobileHumWebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
         public void Delete(int id)
         {
         }
